@@ -24,6 +24,7 @@ module.exports = {
       }
     ],
     "no-underscore-dangle": ["error", { "allow": ["__REDUX_DEVTOOLS_EXTENSION__"] }],
+    "import/extensions": 0,
     "import/prefer-default-export": 0,
     "@typescript-eslint/no-unused-vars": "error",
     "react-hooks/rules-of-hooks": "error",
