@@ -15,9 +15,16 @@
     "react-scripts": "3.4.0",
     "typescript": "~3.7.2"
   },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.21.0",
+    "@typescript-eslint/parser": "^2.21.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-react-hooks": "^2.4.0"
+  },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3006 react-scripts start",
     "build": "react-scripts build",
+    "lint": "eslint --ext .jsx,.js,.tsx,.ts .",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
