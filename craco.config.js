@@ -14,6 +14,12 @@ module.exports = {
       const { oneOf } = loadersObject
       return {
         ...webpackConfig,
+        output: {
+          publicPath: "/iframes/",
+        },
+        devServer: {
+          public: "localhost:3001/iframes/",
+        },
         module: {
           ...webpackConfig.module,
           rules: [
