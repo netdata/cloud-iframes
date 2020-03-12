@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from "react"
 
-type ParentMessageType = "isSignedIn"
+type ParentMessageType = "is-signed-in" | "hello-from-space-panel"
 
 interface ParentMessage {
   type: ParentMessageType
@@ -11,7 +11,7 @@ export const sendToParent = (message: ParentMessage) => {
 }
 
 
-type IframesMessageType = "spaces" | "workspaces"
+type IframesMessageType = "spaces" | "workspaces" | "rooms"
   | "hello-from-spaces-bar" | "hello-from-space-panel"
 
 interface IframesMessage<T = unknown> {
