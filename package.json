@@ -15,9 +15,11 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "axios": "^0.19.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scripts": "3.4.0",
+    "react-use": "^13.27.0",
     "styled-components": "^5.0.1",
     "typescript": "~3.7.2"
   },
@@ -34,7 +36,7 @@
     "svgo-loader": "^2.2.1"
   },
   "scripts": {
-    "start": "PORT=3006 craco start",
+    "start": "PORT=3001 craco start",
     "build": "react-scripts build",
     "lint": "eslint --ext .jsx,.js,.tsx,.ts .",
     "test": "react-scripts test",
