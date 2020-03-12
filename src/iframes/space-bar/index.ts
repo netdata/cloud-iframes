@@ -1,1 +1,1 @@
-export * from "./space-bar"
+export { SpacesBar } from "./spaces-bar"
