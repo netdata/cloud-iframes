@@ -16,17 +16,19 @@ export const PanelHeader = styled(H4)`
 `
 
 export const PanelSection = styled.section<{ leading?: boolean }>`
-  position: relative;
-  margin-top: ${({ leading }) => !leading && getSizeBy(2)};
-
-  &::before {
-    ${({ leading }) => (leading ? "display: none" : "")};
-    position: absolute;
-    content: "";
-    width: ${getSizeBy(10)};
-    height: 1px;
-    top: 0;
-    left: calc(50% - ${getSizeBy(10)} / 2);
-    background: ${getColor(["borderColor"])};
+  &:not(:first-child) {
+    position: relative;
+    margin-top: ${({ leading }) => !leading && getSizeBy(2)};
+   
+    &:before {
+      ${({ leading }) => (leading ? "display: none" : "")};
+      position: absolute;
+      content: "";
+      width: ${getSizeBy(10)};
+      height: 1px;
+      top: 0;
+      left: calc(50% - ${getSizeBy(10)} / 2);
+      background: ${getColor(["borderColor"])};
+    }
   }
 `
