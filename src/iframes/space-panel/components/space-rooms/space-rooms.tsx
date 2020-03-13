@@ -1,15 +1,20 @@
 import React from "react"
+import { RoomsPayload } from "utils/api"
+
 import { RoomLabel } from "./room-label"
-import { roomsMock } from "../../mocks"
 import {
   RoomListContainer, RoomAddSection, StyledAnnotation, PlusButton,
 } from "./styled"
 
 const mockedWorkspace = {}
 
-export const SpaceRooms = () => {
+interface Props {
+  roomsResult: RoomsPayload
+}
+export const SpaceRooms = ({
+  roomsResult,
+}: Props) => {
   const workspace = mockedWorkspace as any
-  const rooms = roomsMock as any
   const userIsAdmin = true
   const isAllowedToCreateRooms = !workspace.createRoomAdminsOnly || userIsAdmin
 
@@ -27,7 +32,7 @@ export const SpaceRooms = () => {
         </RoomAddSection>
       )}
       <RoomListContainer>
-        {rooms.map((room: any) => (
+        {roomsResult.results.map((room: any) => (
           <RoomLabel key={room.id} room={room} />
         ))}
       </RoomListContainer>

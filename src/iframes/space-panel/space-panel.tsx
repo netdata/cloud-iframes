@@ -1,4 +1,8 @@
 import React from "react"
+import { useMount } from "react-use"
+
+import { sendToParent, sendToIframes, useListenToPostMessage } from "utils/post-message"
+import { RoomsPayload } from "utils/api"
 
 import { VisitedNodes } from "./components/visited-nodes"
 import { ReplicatedNodes } from "./components/replicated-nodes"
@@ -8,25 +12,49 @@ import {
   ScrollContainer, PanelSection,
 } from "./styled"
 
-interface Props {
 
+interface StreamedHostsData {
+  masterNodeName: string,
+  masterNodeUrl: string,
+  streamedHosts: { hostname: string, url: string }[],
 }
-export const SpacePanel = ({
 
-}: Props) => {
-  const hasStreamedHosts = true
+export const SpacePanel = () => {
+  useMount(() => {
+    sendToIframes({
+      type: "hello-from-space-panel",
+      payload: true,
+    })
+  })
+  const roomsResult = useListenToPostMessage<RoomsPayload>("rooms")
+
+  useMount(() => {
+    sendToParent({
+      type: "hello-from-space-panel",
+      payload: true,
+    })
+  })
+
+  const streamedHostsData = useListenToPostMessage<StreamedHostsData>("streamed-hosts-data")
+  const shouldDisplayVisitedNodes = false
 
   return (
     <ScrollContainer>
-      {hasStreamedHosts && (
+      {streamedHostsData && streamedHostsData.streamedHosts.length > 0 && (
         <PanelSection leading>
-          <ReplicatedNodes />
+          <ReplicatedNodes streamedHostsData={streamedHostsData} />
         </PanelSection>
       )}
-      <SpaceRooms />
-      <PanelSection>
-        <VisitedNodes />
-      </PanelSection>
+      {roomsResult && roomsResult.results.length > 0 && (
+        <PanelSection>
+          <SpaceRooms roomsResult={roomsResult} />
+        </PanelSection>
+      )}
+      {shouldDisplayVisitedNodes && (
+        <PanelSection>
+          <VisitedNodes />
+        </PanelSection>
+      )}
     </ScrollContainer>
   )
 }
