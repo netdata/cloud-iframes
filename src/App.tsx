@@ -15,7 +15,7 @@ const SPACE_BAR = "space-bar"
 export const App = () => {
   let path = window.location.pathname.replace("/", "")
   if (IS_DEVELOPMENT) {
-    path = path.replace("iframes/", "")
+    path = path.replace("sso/", "")
   }
 
   return (

@@ -15,10 +15,10 @@ module.exports = {
       return {
         ...webpackConfig,
         output: {
-          publicPath: "/iframes/",
+          publicPath: "/sso/",
         },
         devServer: {
-          public: "localhost:3001/iframes/",
+          public: "localhost:3001/sso/",
         },
         module: {
           ...webpackConfig.module,
