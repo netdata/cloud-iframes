@@ -2,6 +2,7 @@
   "name": "cloud-iframes",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/sso",
   "dependencies": {
     "@material/list": "^5.1.0",
     "@netdata/netdata-ui": "^0.7.23",
