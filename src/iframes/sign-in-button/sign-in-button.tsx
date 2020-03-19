@@ -20,10 +20,6 @@ interface AccountsMePayload {
   createdAt: string
 }
 
-const redirectUri = encodeURIComponent(document.referrer)
-const cloudSignInUrl = `/sign-in?redirect_uri=${redirectUri}`
-
-
 export const SignInButton = () => {
   const cookieTokenExpiresAt = getCookie(TOKEN_EXPIRES_AT) as string
   const expiresAtDecoded = decodeURIComponent(
@@ -39,6 +35,7 @@ export const SignInButton = () => {
       payload: hasStillCookie,
     })
   })
+
 
   // always fetch account, to check if user is logged in
   const [account, resetAccount] = useHttp<AccountsMePayload>(
@@ -87,18 +84,16 @@ export const SignInButton = () => {
         payload: { ...rooms, spaceSlug: spaces?.results[0]?.slug },
       })
     }
-  }, [helloFromSpacePanel, rooms])
+  }, [helloFromSpacePanel, spaces, rooms])
 
 
   // logout handling
   const [isMakingLogout, setIsMakingLogout] = useState(false)
   const handleLogoutClick = useCallback(() => {
-    console.log("logout") // eslint-disable-line
     const logoutUrl = `${cloudApiUrl}auth/account/logout`
     setIsMakingLogout(true)
     axiosInstance.post(logoutUrl, {})
       .then(() => {
-        console.log("logout done") // eslint-disable-line
         setIsMakingLogout(true)
         resetAccount()
         resetSpaces()
@@ -110,6 +105,14 @@ export const SignInButton = () => {
       })
   }, [resetAccount, resetRooms, resetSpaces])
 
+
+  const redirectUri = encodeURIComponent(document.referrer)
+  const query = new URLSearchParams(window.location.search.substr(1))
+  const id = query.get("id")
+  const name = query.get("name")
+  const origin = query.get("origin")
+  const cloudSignInUrl = "/sign-in"
+    + `?id=${id}&name=${name}&origin=${origin}&redirect_uri=${redirectUri}`
 
   return (
     <StyledButtonContainer>
