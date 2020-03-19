@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { getSizeBy, getColor, Text } from "@netdata/netdata-ui"
 
-export const InitialsContainer = styled.div<{ active?: boolean }>`
+export const InitialsContainer = styled.a<{ active?: boolean }>`
   width: ${getSizeBy(5)};
   height: ${getSizeBy(5)};
   margin-bottom: ${getSizeBy(2)};
@@ -12,8 +12,9 @@ export const InitialsContainer = styled.div<{ active?: boolean }>`
   border-radius: ${getSizeBy()};
   border: 2px solid;
   cursor: pointer;
-  border-color: ${({ active }) =>
-    active ? getColor(["success"]) : getColor(["gray", "limedSpruce"])};
+  text-decoration: none;
+  border-color: ${({ active }) => (
+    active ? getColor(["success"]) : getColor(["gray", "limedSpruce"]))};
 `
 
 export const InitialLetter = styled(Text)<{ gray?: boolean }>`
