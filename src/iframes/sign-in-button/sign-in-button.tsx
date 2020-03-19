@@ -4,7 +4,7 @@ import { useMount } from "react-use"
 import { Button } from "@netdata/netdata-ui"
 import { useHttp, axiosInstance } from "hooks/use-http"
 import { sendToIframes, sendToParent, useListenToPostMessage } from "utils/post-message"
-import { RoomsPayload, SpacesPayload } from "utils/api"
+import { NodesPayload, RoomsPayload, SpacesPayload } from "utils/api"
 import { getCookie } from "utils/cookies"
 
 import { StyledButtonContainer, StyledSignInButton } from "./styles"
@@ -87,6 +87,45 @@ export const SignInButton = () => {
   }, [helloFromSpacePanel, spaces, rooms])
 
 
+  const redirectUri = encodeURIComponent(document.referrer)
+  const query = new URLSearchParams(window.location.search.substr(1))
+  const id = query.get("id")
+  const name = query.get("name")
+  const origin = query.get("origin")
+  const cloudSignInUrl = "/sign-in"
+    + `?id=${id}&name=${name}&origin=${origin}&redirect_uri=${redirectUri}`
+
+
+  // upsert a node
+  const [wasUpsert, setWasUpsert] = useState(false)
+  useEffect(() => {
+    if (account) {
+      const upserUrl = `${cloudApiUrl}/accounts/${account.id}/nodes/${id}`
+      axiosInstance.put(upserUrl, {
+        hostname: name,
+        urls: [origin],
+      }).then(() => {
+        setWasUpsert(true)
+      })
+    }
+  }, [account, id, name, origin])
+
+
+  // fetch visited nodes
+  const [nodes, resetNodes] = useHttp<NodesPayload>(
+    `${cloudApiUrl}accounts/${account?.id}/nodes`,
+    Boolean(account),
+    wasUpsert, // update also when it changes
+  )
+  useEffect(() => {
+    if (nodes && helloFromSpacePanel) {
+      sendToIframes({
+        type: "visited-nodes",
+        payload: nodes,
+      })
+    }
+  }, [helloFromSpacePanel, nodes])
+
   // logout handling
   const [isMakingLogout, setIsMakingLogout] = useState(false)
   const handleLogoutClick = useCallback(() => {
@@ -98,21 +137,14 @@ export const SignInButton = () => {
         resetAccount()
         resetSpaces()
         resetRooms()
+        resetNodes()
         setIsLoggedIn(false)
       }).catch((e) => {
         console.warn("error during logout", e) // eslint-disable-line no-console
         setIsMakingLogout(false)
       })
-  }, [resetAccount, resetRooms, resetSpaces])
+  }, [resetAccount, resetNodes, resetRooms, resetSpaces])
 
-
-  const redirectUri = encodeURIComponent(document.referrer)
-  const query = new URLSearchParams(window.location.search.substr(1))
-  const id = query.get("id")
-  const name = query.get("name")
-  const origin = query.get("origin")
-  const cloudSignInUrl = "/sign-in"
-    + `?id=${id}&name=${name}&origin=${origin}&redirect_uri=${redirectUri}`
 
   return (
     <StyledButtonContainer>
