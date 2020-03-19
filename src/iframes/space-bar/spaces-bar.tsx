@@ -33,7 +33,12 @@ export const SpacesBar = () => {
       </SpacesList>
 
       <SeparatedSection>
-        <Button icon="plus" onClick={() => {}} />
+        <Button
+          icon="plus"
+          onClick={() => {
+            window.top.window.location.href = "/spaces"
+          }}
+        />
       </SeparatedSection>
     </ListContainer>
   )

@@ -19,12 +19,18 @@ interface Props {
 }
 
 export const SpaceIcon = ({ space, active, className }: Props) => {
-  const navigateToWorkspace = () => {}
   const [firstLetter, secondLetter] = getSpaceInitials(space.name)
+
+  const href = `/spaces/${space.slug}`
 
   return (
     <Tooltip content={(space && space.name) || ""} align="right">
-      <InitialsContainer className={className} onClick={navigateToWorkspace} active={active}>
+      <InitialsContainer
+        className={className}
+        href={href}
+        target="_PARENT"
+        active={active}
+      >
         <InitialLetter>{firstLetter}</InitialLetter>
         <InitialLetter gray>{secondLetter}</InitialLetter>
       </InitialsContainer>
