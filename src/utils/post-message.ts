@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from "react"
 
-type ParentMessageType = "is-signed-in" | "hello-from-space-panel"
+type ParentMessageType = "is-signed-in" | "hello-from-space-panel" | "hello-from-sign-in"
 
 interface ParentMessage {
   type: ParentMessageType

@@ -1,11 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react"
+import { useMount } from "react-use"
 
 import { Button } from "@netdata/netdata-ui"
 import { useHttp, axiosInstance } from "hooks/use-http"
 import { sendToIframes, sendToParent, useListenToPostMessage } from "utils/post-message"
-import { SpacesPayload } from "utils/api"
+import { RoomsPayload, SpacesPayload } from "utils/api"
+import { getCookie } from "utils/cookies"
 
 import { StyledButtonContainer, StyledSignInButton } from "./styles"
+
+const TOKEN_EXPIRES_AT = "token_expires_at"
 
 const cloudApiUrl = "/api/v1/"
 interface AccountsMePayload {
@@ -21,6 +25,21 @@ const cloudSignInUrl = `/sign-in?redirect_uri=${redirectUri}`
 
 
 export const SignInButton = () => {
+  const cookieTokenExpiresAt = getCookie(TOKEN_EXPIRES_AT) as string
+  const expiresAtDecoded = decodeURIComponent(
+    decodeURIComponent(cookieTokenExpiresAt),
+  )
+  const now = new Date().valueOf()
+  const expirationDate = new Date(expiresAtDecoded).valueOf()
+  const hasStillCookie = expirationDate > now
+
+  useMount(() => {
+    sendToParent({
+      type: "hello-from-sign-in",
+      payload: hasStillCookie,
+    })
+  })
+
   // always fetch account, to check if user is logged in
   const [account, resetAccount] = useHttp<AccountsMePayload>(
     `${cloudApiUrl}accounts/me`,
