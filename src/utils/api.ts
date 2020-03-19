@@ -13,6 +13,7 @@ export interface SpacesPayload {
 
 export interface RoomsPayload {
   updatedAt: string
+  spaceSlug: string
   results: {
     id: string
     slug: string

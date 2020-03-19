@@ -76,13 +76,16 @@ export const SignInButton = () => {
 
   // fetch rooms of first space and send it to space-panel iframe
   const firstSpaceId = spaces?.results[0]?.id
-  const [rooms, resetRooms] = useHttp(
+  const [rooms, resetRooms] = useHttp<RoomsPayload>(
     `${cloudApiUrl}spaces/${firstSpaceId}/rooms`,
     Boolean(firstSpaceId),
   )
   useEffect(() => {
     if (rooms && helloFromSpacePanel) {
-      sendToIframes({ type: "rooms", payload: rooms })
+      sendToIframes({
+        type: "rooms",
+        payload: { ...rooms, spaceSlug: spaces?.results[0]?.slug },
+      })
     }
   }, [helloFromSpacePanel, rooms])
 
