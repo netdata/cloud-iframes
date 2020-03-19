@@ -15,19 +15,16 @@ export const axiosInstance = axios.create({
 export const useHttp = <T = unknown>(
   url: string | undefined,
   shouldMakeCall : boolean = true,
-  isExternal?: boolean,
+  watchedProperty?: unknown,
 ) => {
   const [isFetching, setIsFetching] = useState(false)
   const [isError, setIsError] = useState(false)
   const [data, setData] = useState<T | null>(null)
   useEffect(() => {
     if (shouldMakeCall && url && !isError) {
-      const options = isExternal
-        ? { headers: null, withCredentials: false }
-        : {}
 
       setIsFetching(true)
-      axiosInstance.get(url, options)
+      axiosInstance.get(url)
         .then((r) => {
           if (r.data) {
             setData(r.data)
@@ -42,7 +39,7 @@ export const useHttp = <T = unknown>(
           setIsFetching(false)
         })
     }
-  }, [isError, isExternal, shouldMakeCall, url])
+  }, [isError, watchedProperty, shouldMakeCall, url])
 
   const resetCallback = useCallback(() => {
     setData(null)

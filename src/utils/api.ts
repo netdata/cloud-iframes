@@ -20,3 +20,11 @@ export interface RoomsPayload {
     name: string
   }[]
 }
+
+export type NodesPayload = {
+  id: string
+  hostname: string
+  urls: string[]
+  accessCount: number
+  lastAccessTime: string
+}[]

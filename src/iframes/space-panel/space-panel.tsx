@@ -2,7 +2,7 @@ import React from "react"
 import { useMount } from "react-use"
 
 import { sendToParent, sendToIframes, useListenToPostMessage } from "utils/post-message"
-import { RoomsPayload } from "utils/api"
+import { NodesPayload, RoomsPayload } from "utils/api"
 
 import { VisitedNodes } from "./components/visited-nodes"
 import { ReplicatedNodes } from "./components/replicated-nodes"
@@ -36,7 +36,7 @@ export const SpacePanel = () => {
   })
 
   const streamedHostsData = useListenToPostMessage<StreamedHostsData>("streamed-hosts-data")
-  const shouldDisplayVisitedNodes = false
+  const visitedNodes = useListenToPostMessage<NodesPayload>("visited-nodes")
 
   return (
     <ScrollContainer>
@@ -50,9 +50,9 @@ export const SpacePanel = () => {
           <SpaceRooms roomsResult={roomsResult} />
         </PanelSection>
       )}
-      {shouldDisplayVisitedNodes && (
+      {visitedNodes && visitedNodes.length && (
         <PanelSection>
-          <VisitedNodes />
+          <VisitedNodes visitedNodes={visitedNodes} />
         </PanelSection>
       )}
     </ScrollContainer>
