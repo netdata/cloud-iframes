@@ -33,7 +33,7 @@ export const SpaceRooms = ({
       )}
       <RoomListContainer>
         {roomsResult.results.map((room: any) => (
-          <RoomLabel key={room.id} room={room} />
+          <RoomLabel key={room.id} room={room} spaceSlug={roomsResult.spaceSlug} />
         ))}
       </RoomListContainer>
     </>

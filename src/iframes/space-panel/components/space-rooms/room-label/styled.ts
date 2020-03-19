@@ -18,11 +18,12 @@ export const Container = styled.div`
   }
 `
 
-export const RoomName = styled(Text)`
+export const RoomName = styled(Text.withComponent("a"))`
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   min-width: 0;
+  text-decoration: none;
   white-space: nowrap;
 `
 

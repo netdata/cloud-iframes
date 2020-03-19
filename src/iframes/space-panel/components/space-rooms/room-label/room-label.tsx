@@ -14,19 +14,26 @@ import {
 
 interface Props {
   room: any
+  spaceSlug: string
 }
 
-export const RoomLabel = ({ room }: Props) => {
+export const RoomLabel = ({ room, spaceSlug }: Props) => {
   const alarmCounter = room.alarmCounter || ({} as any)
 
   const handleSelectRoom = () => {
     // navigate to cloud room
   }
+  const href = `/spaces/${spaceSlug}/rooms/${room.slug}`
 
   return (
     <Container onClick={handleSelectRoom}>
       <StyledIcon name="room" />
-      <RoomName>{room.name}</RoomName>
+      <RoomName
+        href={href}
+        target="_PARENT"
+      >
+        {room.name}
+      </RoomName>
       <IndicatorsContainer>
         {alarmCounter?.critical > 0 && (
           <ErrorIndicator>
