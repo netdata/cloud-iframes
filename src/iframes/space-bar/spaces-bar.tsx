@@ -3,7 +3,7 @@ import { useMount } from "react-use"
 import { Button } from "@netdata/netdata-ui"
 
 import { sendToIframes, useListenToPostMessage } from "utils/post-message"
-import { SpacesPayload } from "utils/api"
+import { SpacesPayload } from "utils/types"
 import { SpaceIcon } from "./components/space-icon"
 import {
   ListContainer, SpacesList, SeparatedSection, SpacePlaceholder,
