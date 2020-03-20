@@ -13,7 +13,7 @@ export const sendToParent = (message: ParentMessage) => {
 
 type IframesMessageType = "spaces" | "workspaces" | "rooms"
   | "hello-from-spaces-bar" | "hello-from-space-panel" | "streamed-hosts-data"
-  | "visited-nodes"
+  | "visited-nodes" | "delete-node-request"
 
 interface IframesMessage<T = unknown> {
   type: IframesMessageType
@@ -39,14 +39,20 @@ export const sendToIframes = (message: IframesMessage) => {
     })
 }
 
-export const useListenToPostMessage = <T>(messageType: IframesMessageType) => {
+export const useListenToPostMessage = <T>(
+  messageType: IframesMessageType,
+  callback?: (newMessage: T) => void,
+) => {
   const [lastMessage, setLastMessage] = useState<T>()
   const handleMessage = useCallback((message) => {
     const data = message.data as IframesMessage<T>
     if (data.type === messageType) {
       setLastMessage(data.payload)
+      if (callback) {
+        callback(data.payload)
+      }
     }
-  }, [messageType])
+  }, [callback, messageType])
   useEffect(() => {
     window.addEventListener("message", handleMessage)
     return () => {

@@ -4,8 +4,6 @@ import "@material/list/dist/mdc.list.css"
 import "@rmwc/list/collapsible-list.css"
 import "@rmwc/icon/icon.css"
 
-import { Icon } from "@netdata/netdata-ui"
-
 import { VisitedNodes as VisitedNodesT } from "utils/types"
 import {
   NodesContainer,
@@ -14,6 +12,7 @@ import {
   ListHeaderContainer,
   NodeUrl,
   NodeName,
+  TrashIcon,
 } from "./styled"
 
 interface NodeProps {
@@ -21,9 +20,10 @@ interface NodeProps {
     name: string
     urls: string[]
   }
+  onDeleteClick: () => void
   visitNode: (url: string) => void
 }
-const Node = ({ agent: { name, urls }, visitNode }: NodeProps) => (
+const Node = ({ agent: { name, urls }, onDeleteClick, visitNode }: NodeProps) => (
   <CollapsibleList
     handle={(
       <SimpleListItem
@@ -41,21 +41,31 @@ const Node = ({ agent: { name, urls }, visitNode }: NodeProps) => (
       <ListItem
         // eslint-disable-next-line react/no-array-index-key
         key={i}
-        onClick={() => {
-          visitNode(url)
-        }}
       >
-        <NodeUrl>{url}</NodeUrl>
+        <NodeUrl
+          onClick={() => {
+            visitNode(url)
+          }}
+        >
+          {url}
+        </NodeUrl>
+        <TrashIcon
+          name="trashcan"
+          size="small"
+          onClick={onDeleteClick}
+        />
       </ListItem>
     ))}
   </CollapsibleList>
 )
 
 interface Props {
+  onDeleteClick: (nodeId: string) => void
   visitedNodes: VisitedNodesT
 }
 
 export const VisitedNodes = ({
+  onDeleteClick,
   visitedNodes,
 }: Props) => {
   const visitNode = (url: string) => {
@@ -76,9 +86,13 @@ export const VisitedNodes = ({
           </ListHeaderContainer>
         )}
       >
-        {visitedNodes.map((agent, i) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Node key={i} visitNode={visitNode} agent={agent} />
+        {visitedNodes.map((agent) => (
+          <Node
+            key={agent.id}
+            onDeleteClick={() => onDeleteClick(agent.id)}
+            visitNode={visitNode}
+            agent={agent}
+          />
         ))}
       </CollapsibleList>
     </NodesContainer>
