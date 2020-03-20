@@ -38,6 +38,13 @@ export const SpacePanel = () => {
   const streamedHostsData = useListenToPostMessage<StreamedHostsData>("streamed-hosts-data")
   const visitedNodes = useListenToPostMessage<VisitedNodesT>("visited-nodes")
 
+  const handleDeleteNode = (nodeId: string) => {
+    sendToIframes({
+      type: "delete-node-request",
+      payload: nodeId,
+    })
+  }
+
   return (
     <ScrollContainer>
       {streamedHostsData && streamedHostsData.streamedHosts.length > 0 && (
@@ -50,9 +57,12 @@ export const SpacePanel = () => {
           <SpaceRooms roomsResult={roomsResult} />
         </PanelSection>
       )}
-      {visitedNodes && visitedNodes.length && (
+      {visitedNodes && (visitedNodes.length > 0) && (
         <PanelSection>
-          <VisitedNodes visitedNodes={visitedNodes} />
+          <VisitedNodes
+            onDeleteClick={handleDeleteNode}
+            visitedNodes={visitedNodes}
+          />
         </PanelSection>
       )}
     </ScrollContainer>

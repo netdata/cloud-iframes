@@ -30,6 +30,16 @@ export const ListItem = styled.div`
   flex-flow: row nowrap;
   align-items: center;
   cursor: pointer;
+  justify-content: space-between;
+`
+
+export const TrashIcon = styled(Icon)`
+  fill: #35414A;
+  margin-right: ${getSizeBy(2)};
+  transition: opacity .4s ease-in;
+  &:hover {
+    opacity: .6;
+  }
 `
 
 export const StyledIcon = styled(Icon)`
@@ -41,6 +51,7 @@ export const StyledIcon = styled(Icon)`
 
 export const NodeUrl = styled(TextNano)`
   margin-left: ${getSizeBy(5)};
+  font-size: 11px;
   color: #aeb3b7;
 `
 

@@ -97,7 +97,11 @@ export const SignInButton = () => {
 
 
   // upsert a node
-  const [wasUpsert, setWasUpsert] = useState(false)
+  // a hack to trigger /nodes call again
+  const [nodesCallID, setNodesCallID] = useState()
+  const fetchNodesAgain = () => {
+    setNodesCallID(Math.random())
+  }
   useEffect(() => {
     if (account) {
       const upserUrl = `${cloudApiUrl}/accounts/${account.id}/nodes/${id}`
@@ -105,7 +109,7 @@ export const SignInButton = () => {
         name,
         urls: [origin],
       }).then(() => {
-        setWasUpsert(true)
+        fetchNodesAgain()
       })
     }
   }, [account, id, name, origin])
@@ -115,16 +119,26 @@ export const SignInButton = () => {
   const [nodes, resetNodes] = useHttp<NodesPayload>(
     `${cloudApiUrl}accounts/${account?.id}/nodes`,
     Boolean(account),
-    wasUpsert, // update also when it changes
+    nodesCallID, // update also when it changes
   )
   useEffect(() => {
-    if (nodes && helloFromSpacePanel) {
+    if (nodes && helloFromSpacePanel && account) {
       sendToIframes({
         type: "visited-nodes",
         payload: nodes.results,
       })
     }
-  }, [helloFromSpacePanel, nodes])
+  }, [account, helloFromSpacePanel, nodes])
+
+
+  useListenToPostMessage("delete-node-request", (nodeId) => {
+    const accountID = (account as AccountsMePayload).id
+    const deleteNodeUrl = `${cloudApiUrl}accounts/${accountID}/nodes?node_ids=${nodeId}`
+    axiosInstance.delete(deleteNodeUrl)
+      .then(() => {
+        fetchNodesAgain()
+      })
+  })
 
   // logout handling
   const [isMakingLogout, setIsMakingLogout] = useState(false)
