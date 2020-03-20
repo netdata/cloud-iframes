@@ -1,5 +1,5 @@
 import React from "react"
-import { RoomsPayload } from "utils/api"
+import { RoomsPayload } from "utils/types"
 
 import { RoomLabel } from "./room-label"
 import {

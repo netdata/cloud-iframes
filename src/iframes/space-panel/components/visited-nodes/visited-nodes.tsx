@@ -4,7 +4,9 @@ import "@material/list/dist/mdc.list.css"
 import "@rmwc/list/collapsible-list.css"
 import "@rmwc/icon/icon.css"
 
-import { NodesPayload } from "utils/api"
+import { Icon } from "@netdata/netdata-ui"
+
+import { VisitedNodes as VisitedNodesT } from "utils/types"
 import {
   NodesContainer,
   ListItem,
@@ -16,19 +18,19 @@ import {
 
 interface NodeProps {
   agent: {
-    hostname: string
+    name: string
     urls: string[]
   }
   visitNode: (url: string) => void
 }
-const Node = ({ agent: { hostname, urls }, visitNode }: NodeProps) => (
+const Node = ({ agent: { name, urls }, visitNode }: NodeProps) => (
   <CollapsibleList
     handle={(
       <SimpleListItem
         text={(
           <>
             <StyledIcon name="node" />
-            <NodeName>{hostname}</NodeName>
+            <NodeName>{name}</NodeName>
           </>
         )}
         metaIcon={urls.length && "chevron_right"}
@@ -50,7 +52,7 @@ const Node = ({ agent: { hostname, urls }, visitNode }: NodeProps) => (
 )
 
 interface Props {
-  visitedNodes: NodesPayload
+  visitedNodes: VisitedNodesT
 }
 
 export const VisitedNodes = ({

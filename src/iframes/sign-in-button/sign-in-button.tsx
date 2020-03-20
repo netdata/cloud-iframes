@@ -4,7 +4,7 @@ import { useMount } from "react-use"
 import { Button } from "@netdata/netdata-ui"
 import { useHttp, axiosInstance } from "hooks/use-http"
 import { sendToIframes, sendToParent, useListenToPostMessage } from "utils/post-message"
-import { NodesPayload, RoomsPayload, SpacesPayload } from "utils/api"
+import { NodesPayload, RoomsPayload, SpacesPayload } from "utils/types"
 import { getCookie } from "utils/cookies"
 
 import { StyledButtonContainer, StyledSignInButton } from "./styles"
@@ -102,7 +102,7 @@ export const SignInButton = () => {
     if (account) {
       const upserUrl = `${cloudApiUrl}/accounts/${account.id}/nodes/${id}`
       axiosInstance.put(upserUrl, {
-        hostname: name,
+        name,
         urls: [origin],
       }).then(() => {
         setWasUpsert(true)
@@ -121,7 +121,7 @@ export const SignInButton = () => {
     if (nodes && helloFromSpacePanel) {
       sendToIframes({
         type: "visited-nodes",
-        payload: nodes,
+        payload: nodes.results,
       })
     }
   }, [helloFromSpacePanel, nodes])

@@ -21,10 +21,14 @@ export interface RoomsPayload {
   }[]
 }
 
-export type NodesPayload = {
+export type VisitedNodes = {
   id: string
-  hostname: string
+  name: string
   urls: string[]
   accessCount: number
   lastAccessTime: string
 }[]
+
+export type NodesPayload = {
+  results: VisitedNodes
+}
