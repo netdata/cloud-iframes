@@ -5,6 +5,10 @@ export const StyledButtonContainer = styled.div`
   & > * {
     width: 100%;
     height: auto;
+    > button {
+      user-select: none;
+      text-transform: uppercase;
+    }
     > button:hover {
       height: 40px;
     }
@@ -30,4 +34,11 @@ export const StyledSignInButton = styled.a`
   text-decoration: none;
   user-select: none;
   display: flex;
+  &:hover {
+    border-color: #00CB51;
+    border-width: 3px;
+    border-radius: 4px;
+    width: 48px;
+    height: 48px;
+  }
 `
