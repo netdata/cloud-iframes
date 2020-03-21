@@ -3,6 +3,7 @@ import { useMount } from "react-use"
 
 import { sendToParent, sendToIframes, useListenToPostMessage } from "utils/post-message"
 import { VisitedNodes as VisitedNodesT, RoomsPayload } from "utils/types"
+import { useFocusDetector } from "hooks/use-focus-detector"
 
 import { VisitedNodes } from "./components/visited-nodes"
 import { ReplicatedNodes } from "./components/replicated-nodes"
@@ -20,6 +21,8 @@ interface StreamedHostsData {
 }
 
 export const SpacePanel = () => {
+  useFocusDetector()
+
   useMount(() => {
     sendToIframes({
       type: "hello-from-space-panel",

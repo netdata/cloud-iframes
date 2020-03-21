@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useState } from "react"
 
 type ParentMessageType = "is-signed-in" | "hello-from-space-panel" | "hello-from-sign-in"
+  | "iframe-focus-change"
 
 interface ParentMessage {
   type: ParentMessageType
