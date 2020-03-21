@@ -169,7 +169,7 @@ export const SignInButton = () => {
         ? (
           <Button
             isLoading={isMakingLogout}
-            label="LOGOUT"
+            label="Sign out"
             onClick={handleLogoutClick}
           />
         ) : (
