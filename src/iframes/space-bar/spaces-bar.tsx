@@ -4,12 +4,14 @@ import { Button } from "@netdata/netdata-ui"
 
 import { sendToIframes, useListenToPostMessage } from "utils/post-message"
 import { SpacesPayload } from "utils/types"
+import { useFocusDetector } from "hooks/use-focus-detector"
 import { SpaceIcon } from "./components/space-icon"
 import {
   ListContainer, SpacesList, SeparatedSection, SpacePlaceholder,
 } from "./styled"
 
 export const SpacesBar = () => {
+  useFocusDetector()
   useMount(() => {
     sendToIframes({
       type: "hello-from-spaces-bar",

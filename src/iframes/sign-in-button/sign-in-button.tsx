@@ -6,6 +6,7 @@ import { useHttp, axiosInstance } from "hooks/use-http"
 import { sendToIframes, sendToParent, useListenToPostMessage } from "utils/post-message"
 import { NodesPayload, RoomsPayload, SpacesPayload } from "utils/types"
 import { getCookie } from "utils/cookies"
+import { useFocusDetector } from "hooks/use-focus-detector"
 
 import { StyledButtonContainer, StyledSignInButton } from "./styles"
 
@@ -21,6 +22,8 @@ interface AccountsMePayload {
 }
 
 export const SignInButton = () => {
+  useFocusDetector()
+
   const cookieTokenExpiresAt = getCookie(TOKEN_EXPIRES_AT) as string
   const expiresAtDecoded = decodeURIComponent(
     decodeURIComponent(cookieTokenExpiresAt),
@@ -32,7 +35,7 @@ export const SignInButton = () => {
   useMount(() => {
     sendToParent({
       type: "hello-from-sign-in",
-      payload: hasStillCookie,
+      payload: !!hasStillCookie,
     })
   })
 
@@ -174,7 +177,7 @@ export const SignInButton = () => {
             href={cloudSignInUrl}
             target="_PARENT"
           >
-            {isLoggedIn ? "LOGOUT" : "SIGN-IN"}
+            SIGN-IN
           </StyledSignInButton>
         )}
     </StyledButtonContainer>
