@@ -11,19 +11,17 @@ jobs:
     steps:
       - name: Trigger Travis CI
         run: |
-          curl -s -X POST \
-            -H "Content-Type: application/json" \
-            -H "Accept: application/json" \
-            -H "Travis-API-Version: 3" \
+          curl -s -X POST                                         \
+            -H "Content-Type: application/json"                   \
+            -H "Accept: application/json"                         \
+            -H "Travis-API-Version: 3"                            \
             -H "Authorization: token ${{ secrets.travis_token }}" \
             -d '{
               "request": {
                 "message": "Triggered by cloud-iframes",
                 "branch": "develop",
-
                 "config": {
                   "merge_mode": "deep_merge",
-
                   "env": {
                     "global": {
                       "BRANCH": "develop"
@@ -31,5 +29,5 @@ jobs:
                   }
                 }
               }
-            }' \
+            }'                                                    \
           https://api.travis-ci.com/repo/netdata%2Fcloud-sso/requests
