@@ -115,8 +115,8 @@ export const SignInButton = () => {
   }
   useEffect(() => {
     if (account) {
-      const upserUrl = `${cloudApiUrl}/accounts/${account.id}/nodes/${id}`
-      axiosInstance.put(upserUrl, {
+      const upsertUrl = `${cloudApiUrl}accounts/${account.id}/nodes/${id}`
+      axiosInstance.put(upsertUrl, {
         name,
         urls: [origin],
       }).then(() => {
