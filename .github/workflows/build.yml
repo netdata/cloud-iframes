@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Travis CI
-        run: |
+        run: >
           curl -s -X POST
             -H "Content-Type: application/json"
             -H "Accept: application/json"
