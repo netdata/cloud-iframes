@@ -2,7 +2,7 @@ import React from "react"
 import { useMount } from "react-use"
 
 import { sendToParent, sendToIframes, useListenToPostMessage } from "utils/post-message"
-import { VisitedNodes as VisitedNodesT, RoomsPayload } from "utils/types"
+import { VisitedNodes as VisitedNodesT, RoomsMessagePayload } from "utils/types"
 import { useFocusDetector } from "hooks/use-focus-detector"
 
 import { VisitedNodes } from "./components/visited-nodes"
@@ -10,7 +10,7 @@ import { ReplicatedNodes } from "./components/replicated-nodes"
 import { SpaceRooms } from "./components/space-rooms"
 
 import {
-  ScrollContainer, PanelSection,
+  ScrollContainer, PanelSection, PanelHeader,
 } from "./styled"
 
 
@@ -29,7 +29,7 @@ export const SpacePanel = () => {
       payload: true,
     })
   })
-  const roomsResult = useListenToPostMessage<RoomsPayload>("rooms")
+  const roomsResult = useListenToPostMessage<RoomsMessagePayload>("rooms")
 
   useMount(() => {
     sendToParent({
@@ -50,6 +50,11 @@ export const SpacePanel = () => {
 
   return (
     <ScrollContainer>
+      {roomsResult && (
+        <PanelHeader>
+          {roomsResult.spaceName}
+        </PanelHeader>
+      )}
       {streamedHostsData && streamedHostsData.streamedHosts.length > 0 && (
         <PanelSection leading>
           <ReplicatedNodes streamedHostsData={streamedHostsData} />
