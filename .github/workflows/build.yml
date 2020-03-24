@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Travis CI
-        run: >
-          curl -s -X POST
-            -H "Content-Type: application/json"
-            -H "Accept: application/json"
-            -H "Travis-API-Version: 3"
-            -H "Authorization: token ${{ secrets.travis_token }}"
+        run: |
+          curl -s -X POST \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/json" \
+            -H "Travis-API-Version: 3" \
+            -H "Authorization: token ${{ secrets.travis_token }}" \
             -d '{
               "request": {
                 "message": "Triggered by cloud-iframes",
@@ -31,5 +31,5 @@ jobs:
                   }
                 }
               }
-            }'
-            https://api.travis-ci.com/repo/netdata%2Fcloud-sso/requests
+            }' \
+          https://api.travis-ci.com/repo/netdata%2Fcloud-sso/requests
