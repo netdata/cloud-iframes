@@ -11,9 +11,19 @@ export interface SpacesPayload {
   }[]
 }
 
+export interface RoomsMessagePayload {
+  updatedAt: string
+  spaceName: string
+  spaceSlug: string
+  results: {
+    id: string
+    slug: string
+    name: string
+  }[]
+}
+
 export interface RoomsPayload {
   updatedAt: string
-  spaceSlug: string
   results: {
     id: string
     slug: string

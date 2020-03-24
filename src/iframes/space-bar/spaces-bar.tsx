@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { useMount } from "react-use"
 import { Button } from "@netdata/netdata-ui"
 
@@ -21,13 +21,38 @@ export const SpacesBar = () => {
   const spacesResult = useListenToPostMessage<SpacesPayload>("spaces")
   const spaces = spacesResult?.results
 
+  // duplicated state! if additional logic will be added it's better to use sign-in-button
+  // activeSpaceID state
+  const [activeSpaceID, setActiveSpaceID] = useState()
+
+  useEffect(() => {
+    if (!activeSpaceID && spacesResult) {
+      setActiveSpaceID(spacesResult.results[0].id)
+    }
+  }, [activeSpaceID, spacesResult])
+
+  const handleSpaceIconClick = (spaceID: string) => {
+    setActiveSpaceID(spaceID)
+    sendToIframes({
+      type: "space-change",
+      payload: spaceID,
+    })
+  }
+
   return (
     <ListContainer>
       <SpacesList>
         {spaces && spaces.length ? (
-          spaces.map((space, i) => {
-            const isActive = i === 0
-            return <SpaceIcon key={i} space={space} active={isActive} />
+          spaces.map((space) => {
+            const isActive = space.id === activeSpaceID
+            return (
+              <SpaceIcon
+                onSpaceIconClick={handleSpaceIconClick}
+                key={space.id}
+                space={space}
+                active={isActive}
+              />
+            )
           })
         ) : (
           <SpacePlaceholder />

@@ -13,22 +13,22 @@ const getSpaceInitials = (name: string) => {
 }
 
 interface Props {
+  onSpaceIconClick: (spaceID: string) => void
   space: WorkspaceStub
   active?: boolean
   className?: string
 }
 
-export const SpaceIcon = ({ space, active, className }: Props) => {
+export const SpaceIcon = ({
+  onSpaceIconClick, space, active, className,
+}: Props) => {
   const [firstLetter, secondLetter] = getSpaceInitials(space.name)
-
-  const href = `/spaces/${space.slug}`
 
   return (
     <Tooltip content={(space && space.name) || ""} align="right">
       <InitialsContainer
         className={className}
-        href={href}
-        target="_PARENT"
+        onClick={() => onSpaceIconClick(space.id)}
         active={active}
       >
         <InitialLetter>{firstLetter}</InitialLetter>

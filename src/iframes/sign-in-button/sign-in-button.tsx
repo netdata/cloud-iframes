@@ -74,20 +74,28 @@ export const SignInButton = () => {
   }, [helloFromSpacesBar, spaces])
 
 
+  const [spaceID, setSpaceID] = useState()
+
   // fetch rooms of first space and send it to space-panel iframe
   const firstSpaceId = spaces?.results[0]?.id
   const [rooms, resetRooms] = useHttp<RoomsPayload>(
-    `${cloudApiUrl}spaces/${firstSpaceId}/rooms`,
+    `${cloudApiUrl}spaces/${spaceID || firstSpaceId}/rooms`,
     Boolean(firstSpaceId),
   )
   useEffect(() => {
     if (rooms && helloFromSpacePanel) {
+      const currentSpace = spaces?.results.find((space) => space.id === (spaceID || firstSpaceId))
       sendToIframes({
         type: "rooms",
-        payload: { ...rooms, spaceSlug: spaces?.results[0]?.slug },
+        payload: { ...rooms, spaceSlug: currentSpace?.slug, spaceName: currentSpace?.name },
       })
     }
-  }, [helloFromSpacePanel, spaces, rooms])
+  }, [firstSpaceId, helloFromSpacePanel, spaceID, spaces, rooms])
+
+
+  useListenToPostMessage("space-change", (newSpaceID: string) => {
+    setSpaceID(newSpaceID)
+  })
 
 
   const redirectUri = encodeURIComponent(document.referrer)

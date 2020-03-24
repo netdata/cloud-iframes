@@ -1,5 +1,5 @@
 import React from "react"
-import { RoomsPayload } from "utils/types"
+import { RoomsMessagePayload } from "utils/types"
 
 import { RoomLabel } from "./room-label"
 import {
@@ -9,7 +9,7 @@ import {
 const mockedWorkspace = {}
 
 interface Props {
-  roomsResult: RoomsPayload
+  roomsResult: RoomsMessagePayload
 }
 export const SpaceRooms = ({
   roomsResult,

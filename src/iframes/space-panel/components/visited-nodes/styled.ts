@@ -1,5 +1,7 @@
 import styled from "styled-components"
-import { getSizeBy, getColor, Icon, TextNano, Text } from "@netdata/netdata-ui"
+import {
+  H5, getSizeBy, getColor, Icon, TextNano, Text,
+} from "@netdata/netdata-ui"
 
 export const NodesContainer = styled.div`
   .mdc-list-item {
@@ -21,7 +23,10 @@ export const NodesContainer = styled.div`
   }
 `
 
-export const ListHeaderContainer = styled.div``
+export const ListHeaderContainer = styled(H5.withComponent("div"))`
+  text-shadow: unset;
+  color: ${getColor(["borderColor"])};
+`
 
 export const ListItem = styled.div`
   width: 100%;
