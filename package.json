@@ -38,9 +38,9 @@
   },
   "scripts": {
     "start": "PORT=3001 craco start",
-    "build": "react-scripts build",
+    "build": "craco build",
     "lint": "eslint --ext .jsx,.js,.tsx,.ts .",
-    "test": "react-scripts test",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
