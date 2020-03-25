@@ -1,3 +1,5 @@
+const isDevelopmentEnvironment = process.env.NODE_ENV === "development"
+
 module.exports = {
   babel: {
     plugins: ["babel-plugin-styled-components"],
@@ -14,9 +16,11 @@ module.exports = {
       const { oneOf } = loadersObject
       return {
         ...webpackConfig,
-        output: {
-          publicPath: "/sso/",
-        },
+        ...(isDevelopmentEnvironment ? {
+          output: {
+            publicPath: "/sso/",
+          },
+        } : {}),
         devServer: {
           public: "localhost:3001/sso/",
         },
