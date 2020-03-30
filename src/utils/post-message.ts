@@ -14,7 +14,7 @@ export const sendToParent = (message: ParentMessage) => {
 
 type IframesMessageType = "spaces" | "workspaces" | "rooms"
   | "hello-from-spaces-bar" | "hello-from-space-panel" | "streamed-hosts-data"
-  | "visited-nodes" | "delete-node-request" | "space-change"
+  | "visited-nodes" | "delete-node-request" | "space-change" | "synced-private-registry"
 
 interface IframesMessage<T = unknown> {
   type: IframesMessageType

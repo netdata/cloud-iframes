@@ -4,7 +4,9 @@ import { useMount } from "react-use"
 import { Button } from "@netdata/netdata-ui"
 import { useHttp, axiosInstance } from "hooks/use-http"
 import { sendToIframes, sendToParent, useListenToPostMessage } from "utils/post-message"
-import { NodesPayload, RoomsPayload, SpacesPayload } from "utils/types"
+import {
+  NodesPayload, RoomsPayload, SpacesPayload, RegistryMachine,
+} from "utils/types"
 import { getCookie } from "utils/cookies"
 import { useFocusDetector } from "hooks/use-focus-detector"
 
@@ -20,6 +22,9 @@ interface AccountsMePayload {
   avatarURL: string
   createdAt: string
 }
+
+const onlyUnique = <T extends unknown>(array: T[]) => array
+  .filter((value, index, self) => self.indexOf(value) === index)
 
 export const SignInButton = () => {
   useFocusDetector()
@@ -44,6 +49,7 @@ export const SignInButton = () => {
   const [account, resetAccount] = useHttp<AccountsMePayload>(
     `${cloudApiUrl}accounts/me`,
   )
+  const accoundID = account?.id
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   useEffect(() => {
@@ -126,6 +132,16 @@ export const SignInButton = () => {
   }, [account, id, name, origin])
 
 
+  // touch a node
+  useEffect(() => {
+    if (accoundID) {
+      const touchUrl = `${cloudApiUrl}accounts/${accoundID}/nodes/${id}/touch`
+      // no error handling is needed
+      axiosInstance.post(touchUrl, {})
+    }
+  }, [accoundID, id])
+
+
   // fetch visited nodes
   const [nodes, resetNodes] = useHttp<NodesPayload>(
     `${cloudApiUrl}accounts/${account?.id}/nodes`,
@@ -140,6 +156,33 @@ export const SignInButton = () => {
       })
     }
   }, [account, helloFromSpacePanel, nodes])
+
+
+  const privateRegistryNodes = useListenToPostMessage<RegistryMachine[]>("synced-private-registry")
+  const [privateRegistrySynced, setPrivateRegistrySynced] = useState(false)
+  useEffect(() => {
+    if (!privateRegistrySynced && nodes && privateRegistryNodes) {
+      setPrivateRegistrySynced(true)
+      Promise.all(privateRegistryNodes.map((privateRegistryNode) => {
+        const nodeID = privateRegistryNode.guid
+        const nodeCurrentUrls = nodes.results
+          .find((node) => node.id === nodeID)?.urls || []
+        const upsertUrl = `${cloudApiUrl}accounts/${account?.id}/nodes/${nodeID}`
+        const urls = onlyUnique(
+          nodeCurrentUrls.concat(privateRegistryNode.alternateUrls),
+        )
+        return axiosInstance.put(upsertUrl, {
+          name: privateRegistryNode.name,
+          urls,
+        }).catch((error) => {
+          // eslint-disable-next-line no-console
+          console.warn("Error syncing visited node", privateRegistryNode.name, error)
+        })
+      })).then(() => {
+        fetchNodesAgain()
+      })
+    }
+  }, [account, nodes, privateRegistryNodes, privateRegistrySynced])
 
 
   useListenToPostMessage("delete-node-request", (nodeId) => {
