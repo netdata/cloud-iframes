@@ -42,3 +42,12 @@ export type VisitedNodes = {
 export type NodesPayload = {
   results: VisitedNodes
 }
+
+export interface RegistryMachine {
+  guid: string
+  url: string
+  lastTimestamp: number
+  accesses: number
+  name: string
+  alternateUrls: string[]
+}
