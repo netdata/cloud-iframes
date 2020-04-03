@@ -26,7 +26,7 @@ export const ReplicatedNodes = ({
     masterNodeName,
     masterNodeUrl,
     streamedHosts,
-  }
+  },
 }: Props) => (
   <NodesContainer>
     <CollapsibleList

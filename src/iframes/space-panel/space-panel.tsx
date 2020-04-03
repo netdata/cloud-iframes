@@ -55,14 +55,14 @@ export const SpacePanel = () => {
           {roomsResult.spaceName}
         </PanelHeader>
       )}
-      {streamedHostsData && streamedHostsData.streamedHosts.length > 0 && (
+      {roomsResult && roomsResult.results.length > 0 && (
         <PanelSection leading>
-          <ReplicatedNodes streamedHostsData={streamedHostsData} />
+          <SpaceRooms roomsResult={roomsResult} />
         </PanelSection>
       )}
-      {roomsResult && roomsResult.results.length > 0 && (
-        <PanelSection>
-          <SpaceRooms roomsResult={roomsResult} />
+      {streamedHostsData && streamedHostsData.streamedHosts.length > 0 && (
+        <PanelSection leading={!roomsResult?.results.length}>
+          <ReplicatedNodes streamedHostsData={streamedHostsData} />
         </PanelSection>
       )}
       {visitedNodes && (visitedNodes.length > 0) && (
