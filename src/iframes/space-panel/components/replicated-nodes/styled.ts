@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import {
-  getSizeBy, getColor, Icon, Text,
+  H5, getSizeBy, getColor, Icon, Text,
 } from "@netdata/netdata-ui"
 
 export const NodesContainer = styled.div`
@@ -19,7 +19,10 @@ export const NodesContainer = styled.div`
   }
 `
 
-export const ListHeaderContainer = styled.div``
+export const ListHeaderContainer = styled(H5.withComponent("div"))`
+  text-shadow: unset;
+  color: ${getColor(["borderColor"])};
+`
 
 export const ListItem = styled.div`
   width: 100%;
