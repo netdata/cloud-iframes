@@ -26,7 +26,7 @@ export const SpacesBar = () => {
   const [activeSpaceID, setActiveSpaceID] = useState()
 
   useEffect(() => {
-    if (!activeSpaceID && spacesResult) {
+    if (!activeSpaceID && spacesResult && spacesResult.results.length > 0) {
       setActiveSpaceID(spacesResult.results[0].id)
     }
   }, [activeSpaceID, spacesResult])
