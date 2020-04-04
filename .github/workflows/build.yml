@@ -3,7 +3,7 @@ name: Build
 
 on:
   push:
-    branches: ['develop']
+    branches: ['develop', 'release/**', 'master']
 
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
                   "merge_mode": "deep_merge",
                   "env": {
                     "global": {
-                      "BRANCH": "develop"
+                      "BRANCH": "'${GITHUB_REF#refs/heads/}'"
                     }
                   }
                 }
