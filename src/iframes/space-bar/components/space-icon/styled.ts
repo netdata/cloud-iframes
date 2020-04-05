@@ -18,6 +18,5 @@ export const InitialsContainer = styled.div<{ active?: boolean }>`
 
 export const InitialLetter = styled(Text)<{ gray?: boolean }>`
   font-weight: bold;
-  text-transform: uppercase;
   color: ${({ gray }) => (gray ? getColor(["gray", "bombay"]) : getColor(["text"]))};
 `
