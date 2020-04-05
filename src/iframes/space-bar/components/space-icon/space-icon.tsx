@@ -8,7 +8,7 @@ const getSpaceInitials = (name: string) => {
   const splittedName = name.split(" ")
   const [firstSubstring, secondSubstring] = splittedName
   const firstLetter = firstSubstring[0]
-  const secondLetter = secondSubstring ? secondSubstring[0] : firstSubstring[1]
+  const secondLetter = secondSubstring ? secondSubstring[0] : ""
   return [firstLetter, secondLetter]
 }
 
