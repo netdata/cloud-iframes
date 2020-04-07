@@ -20,7 +20,7 @@ interface NodeProps {
     name: string
     urls: string[]
   }
-  onDeleteClick: () => void
+  onDeleteClick: (url: string) => void
   visitNode: (url: string) => void
 }
 const Node = ({ agent: { name, urls }, onDeleteClick, visitNode }: NodeProps) => (
@@ -52,7 +52,9 @@ const Node = ({ agent: { name, urls }, onDeleteClick, visitNode }: NodeProps) =>
         <TrashIcon
           name="trashcan"
           size="small"
-          onClick={onDeleteClick}
+          onClick={() => {
+            onDeleteClick(url)
+          }}
         />
       </ListItem>
     ))}
@@ -60,7 +62,7 @@ const Node = ({ agent: { name, urls }, onDeleteClick, visitNode }: NodeProps) =>
 )
 
 interface Props {
-  onDeleteClick: (nodeId: string) => void
+  onDeleteClick: (nodeId: string, url: string) => void
   visitedNodes: VisitedNodesT
 }
 
@@ -89,7 +91,7 @@ export const VisitedNodes = ({
         {visitedNodes.map((agent) => (
           <Node
             key={agent.id}
-            onDeleteClick={() => onDeleteClick(agent.id)}
+            onDeleteClick={(url) => onDeleteClick(agent.id, url)}
             visitNode={visitNode}
             agent={agent}
           />
