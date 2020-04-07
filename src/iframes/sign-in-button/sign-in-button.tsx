@@ -113,25 +113,6 @@ export const SignInButton = () => {
     + `?id=${id}&name=${name}&origin=${origin}&redirect_uri=${redirectUri}`
 
 
-  // upsert a node
-  // a hack to trigger /nodes call again
-  const [nodesCallID, setNodesCallID] = useState()
-  const fetchNodesAgain = () => {
-    setNodesCallID(Math.random())
-  }
-  useEffect(() => {
-    if (account) {
-      const upsertUrl = `${cloudApiUrl}accounts/${account.id}/nodes/${id}`
-      axiosInstance.put(upsertUrl, {
-        name,
-        urls: [origin],
-      }).then(() => {
-        fetchNodesAgain()
-      })
-    }
-  }, [account, id, name, origin])
-
-
   // touch a node
   useEffect(() => {
     if (accoundID) {
@@ -140,6 +121,13 @@ export const SignInButton = () => {
       axiosInstance.post(touchUrl, {})
     }
   }, [accoundID, id])
+
+
+  // a hack to trigger /nodes call again
+  const [nodesCallID, setNodesCallID] = useState()
+  const fetchNodesAgain = () => {
+    setNodesCallID(Math.random())
+  }
 
 
   // fetch visited nodes
@@ -158,6 +146,30 @@ export const SignInButton = () => {
   }, [account, helloFromSpacePanel, nodes])
 
 
+  // upsert a node
+  const [doneUpsert, setDoneUpsert] = useState(false)
+  useEffect(() => {
+    if (account && nodes && origin && !doneUpsert) {
+      setDoneUpsert(true)
+      const nodeCurrentUrls = nodes.results.find((node) => node.id === id)?.urls || []
+      const urls = onlyUnique(
+        nodeCurrentUrls.concat(origin).map(decodeURIComponent),
+      )
+      if (urls.length === nodeCurrentUrls.length) {
+        return
+      }
+      const upsertUrl = `${cloudApiUrl}accounts/${account.id}/nodes/${id}`
+      axiosInstance.put(upsertUrl, {
+        name,
+        urls,
+      }).then(() => {
+        fetchNodesAgain()
+      })
+    }
+  }, [account, doneUpsert, id, name, nodes, origin])
+
+
+  // sync private registry
   const privateRegistryNodes = useListenToPostMessage<RegistryMachine[]>("synced-private-registry")
   const [privateRegistrySynced, setPrivateRegistrySynced] = useState(false)
   useEffect(() => {
