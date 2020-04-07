@@ -162,9 +162,7 @@ export const SignInButton = () => {
       axiosInstance.put(upsertUrl, {
         name,
         urls,
-      }).then(() => {
-        fetchNodesAgain()
-      })
+      }).then(fetchNodesAgain)
     }
   }, [account, doneUpsert, id, name, nodes, origin])
 
@@ -190,9 +188,7 @@ export const SignInButton = () => {
           // eslint-disable-next-line no-console
           console.warn("Error syncing visited node", privateRegistryNode.name, error)
         })
-      })).then(() => {
-        fetchNodesAgain()
-      })
+      })).then(fetchNodesAgain)
     }
   }, [account, nodes, privateRegistryNodes, privateRegistrySynced])
 
@@ -211,13 +207,13 @@ export const SignInButton = () => {
       // delete node
       const deleteNodeUrl = `${cloudApiUrl}accounts/${accountID}/nodes?node_ids=${nodeID}`
       axiosInstance.delete(deleteNodeUrl)
-        .then(() => { fetchNodesAgain() })
+        .then(fetchNodesAgain)
     } else {
       const upsertUrl = `${cloudApiUrl}accounts/${account?.id}/nodes/${nodeID}`
       axiosInstance.put(upsertUrl, {
         name: node.name,
         urls: newNodeUrls,
-      }).then(() => { fetchNodesAgain() })
+      }).then(fetchNodesAgain)
     }
   })
 
