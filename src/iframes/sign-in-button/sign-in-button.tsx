@@ -37,6 +37,9 @@ export const SignInButton = () => {
   const expirationDate = new Date(expiresAtDecoded).valueOf()
   const hasStillCookie = expirationDate > now
 
+  const query = new URLSearchParams(window.location.search.substr(1))
+  const disableCloud = query.get("disableCloud") === "true"
+
   useMount(() => {
     sendToParent({
       type: "hello-from-sign-in",
@@ -71,7 +74,7 @@ export const SignInButton = () => {
   // fetch spaces, and send it to spaces-bar iframe
   const [spaces, resetSpaces] = useHttp<SpacesPayload>(
     `${cloudApiUrl}spaces`,
-    Boolean(account),
+    Boolean(account) && !disableCloud,
   )
   useEffect(() => {
     if (spaces && helloFromSpacesBar) {
@@ -105,7 +108,6 @@ export const SignInButton = () => {
 
 
   const redirectUri = encodeURIComponent(document.referrer)
-  const query = new URLSearchParams(window.location.search.substr(1))
   const id = query.get("id")
   const name = query.get("name")
   const origin = query.get("origin")
