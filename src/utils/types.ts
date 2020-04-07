@@ -31,13 +31,15 @@ export interface RoomsPayload {
   }[]
 }
 
-export type VisitedNodes = {
+export interface VisitedNode {
   id: string
   name: string
   urls: string[]
   accessCount: number
   lastAccessTime: string
-}[]
+}
+
+export type VisitedNodes = VisitedNode[]
 
 export type NodesPayload = {
   results: VisitedNodes
