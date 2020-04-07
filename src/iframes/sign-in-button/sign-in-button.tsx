@@ -5,7 +5,7 @@ import { Button } from "@netdata/netdata-ui"
 import { useHttp, axiosInstance } from "hooks/use-http"
 import { sendToIframes, sendToParent, useListenToPostMessage } from "utils/post-message"
 import {
-  NodesPayload, RoomsPayload, SpacesPayload, RegistryMachine,
+  NodesPayload, RoomsPayload, SpacesPayload, RegistryMachine, VisitedNode,
 } from "utils/types"
 import { getCookie } from "utils/cookies"
 import { useFocusDetector } from "hooks/use-focus-detector"
@@ -197,13 +197,28 @@ export const SignInButton = () => {
   }, [account, nodes, privateRegistryNodes, privateRegistrySynced])
 
 
-  useListenToPostMessage("delete-node-request", (nodeId) => {
+  interface DeleteNodeRequestPayload { nodeID: string, url: string }
+  useListenToPostMessage<DeleteNodeRequestPayload>("delete-node-request", ({ nodeID, url }) => {
     const accountID = (account as AccountsMePayload).id
-    const deleteNodeUrl = `${cloudApiUrl}accounts/${accountID}/nodes?node_ids=${nodeId}`
-    axiosInstance.delete(deleteNodeUrl)
-      .then(() => {
-        fetchNodesAgain()
-      })
+    if (!nodes) {
+      console.warn("Error during delete-node-request, no nodes present") // eslint-disable-line
+      return
+    }
+    const node = nodes.results.find((n) => n.id === nodeID) as VisitedNode
+    const nodeUrls = node.urls || []
+    const newNodeUrls = nodeUrls.filter((u) => u !== url)
+    if (newNodeUrls.length === 0) {
+      // delete node
+      const deleteNodeUrl = `${cloudApiUrl}accounts/${accountID}/nodes?node_ids=${nodeID}`
+      axiosInstance.delete(deleteNodeUrl)
+        .then(() => { fetchNodesAgain() })
+    } else {
+      const upsertUrl = `${cloudApiUrl}accounts/${account?.id}/nodes/${nodeID}`
+      axiosInstance.put(upsertUrl, {
+        name: node.name,
+        urls: newNodeUrls,
+      }).then(() => { fetchNodesAgain() })
+    }
   })
 
   // logout handling

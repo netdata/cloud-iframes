@@ -41,10 +41,10 @@ export const SpacePanel = () => {
   const streamedHostsData = useListenToPostMessage<StreamedHostsData>("streamed-hosts-data")
   const visitedNodes = useListenToPostMessage<VisitedNodesT>("visited-nodes")
 
-  const handleDeleteNode = (nodeId: string) => {
+  const handleDeleteNode = (nodeID: string, url: string) => {
     sendToIframes({
       type: "delete-node-request",
-      payload: nodeId,
+      payload: { nodeID, url },
     })
   }
 
