@@ -169,7 +169,7 @@ export const SignInButton = () => {
           .find((node) => node.id === nodeID)?.urls || []
         const upsertUrl = `${cloudApiUrl}accounts/${account?.id}/nodes/${nodeID}`
         const urls = onlyUnique(
-          nodeCurrentUrls.concat(privateRegistryNode.alternateUrls),
+          nodeCurrentUrls.concat(privateRegistryNode.alternateUrls).map(decodeURIComponent),
         )
         return axiosInstance.put(upsertUrl, {
           name: privateRegistryNode.name,
