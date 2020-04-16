@@ -1,27 +1,28 @@
-import React from "react"
-import { RoomsMessagePayload } from "utils/types"
+import React from "react";
+import { RoomsMessagePayload } from "utils/types";
 
-import { RoomLabel } from "./room-label"
+import { RoomLabel } from "./room-label";
 import {
-  RoomListContainer, RoomAddSection, StyledAnnotation, PlusButton,
-} from "./styled"
+  RoomListContainer,
+  RoomAddSection,
+  StyledAnnotation,
+  PlusButton,
+} from "./styled";
 
-const mockedWorkspace = {}
+const mockedWorkspace = {};
 
 interface Props {
-  roomsResult: RoomsMessagePayload
+  roomsResult: RoomsMessagePayload;
 }
-export const SpaceRooms = ({
-  roomsResult,
-}: Props) => {
-  const workspace = mockedWorkspace as any
-  const userIsAdmin = true
-  const isAllowedToCreateRooms = !workspace.createRoomAdminsOnly || userIsAdmin
+export const SpaceRooms = ({ roomsResult }: Props) => {
+  const workspace = mockedWorkspace as any;
+  const userIsAdmin = true;
+  const isAllowedToCreateRooms = !workspace.createRoomAdminsOnly || userIsAdmin;
 
   const handleAddRoom = (e: React.SyntheticEvent<HTMLButtonElement, Event>) => {
-    e.preventDefault()
-    // navigate to room creation?, which is not a route in Cloud SPA (TODO make it so)
-  }
+    e.preventDefault();
+    window.top.window.location.href = `/spaces/${roomsResult.spaceSlug}/rooms/general?modal=createRoom`;
+  };
 
   return (
     <>
@@ -33,9 +34,13 @@ export const SpaceRooms = ({
       )}
       <RoomListContainer>
         {roomsResult.results.map((room: any) => (
-          <RoomLabel key={room.id} room={room} spaceSlug={roomsResult.spaceSlug} />
+          <RoomLabel
+            key={room.id}
+            room={room}
+            spaceSlug={roomsResult.spaceSlug}
+          />
         ))}
       </RoomListContainer>
     </>
-  )
-}
+  );
+};
