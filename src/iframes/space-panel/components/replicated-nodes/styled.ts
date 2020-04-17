@@ -1,7 +1,5 @@
 import styled from "styled-components"
-import {
-  H5, getSizeBy, getColor, Icon, Text,
-} from "@netdata/netdata-ui"
+import { H5, getSizeBy, getColor, Icon, Text } from "@netdata/netdata-ui"
 
 export const NodesContainer = styled.div`
   a {
@@ -43,7 +41,7 @@ export const NodeLink = styled(Text)`
   white-space: nowrap;
   color: inherit;
   &:hover {
-    color: inherit
+    color: inherit;
   }
 `.withComponent("a")
 

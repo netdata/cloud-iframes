@@ -13,29 +13,24 @@ import {
   NodeLink,
 } from "./styled"
 
-
 interface Props {
   streamedHostsData: {
-    masterNodeName: string,
-    masterNodeUrl: string,
-    streamedHosts: { hostname: string, url: string }[],
+    masterNodeName: string
+    masterNodeUrl: string
+    streamedHosts: { hostname: string; url: string }[]
   }
 }
 export const ReplicatedNodes = ({
-  streamedHostsData: {
-    masterNodeName,
-    masterNodeUrl,
-    streamedHosts,
-  },
+  streamedHostsData: { masterNodeName, masterNodeUrl, streamedHosts },
 }: Props) => (
   <NodesContainer>
     <CollapsibleList
       startOpen
-      handle={(
+      handle={
         <ListHeaderContainer>
           <SimpleListItem metaIcon="chevron_right" text="Replicated Nodes" />
         </ListHeaderContainer>
-      )}
+      }
     >
       <MasterNodeContainer>
         <StyledIcon size="small" name="nodes" />

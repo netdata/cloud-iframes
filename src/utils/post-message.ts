@@ -1,6 +1,9 @@
 import { useEffect, useCallback, useState } from "react"
 
-type ParentMessageType = "is-signed-in" | "hello-from-space-panel" | "hello-from-sign-in"
+type ParentMessageType =
+  | "is-signed-in"
+  | "hello-from-space-panel"
+  | "hello-from-sign-in"
   | "iframe-focus-change"
 
 interface ParentMessage {
@@ -11,10 +14,17 @@ export const sendToParent = (message: ParentMessage) => {
   window.parent.postMessage(message, "*")
 }
 
-
-type IframesMessageType = "spaces" | "workspaces" | "rooms"
-  | "hello-from-spaces-bar" | "hello-from-space-panel" | "streamed-hosts-data"
-  | "visited-nodes" | "delete-node-request" | "space-change" | "synced-private-registry"
+type IframesMessageType =
+  | "spaces"
+  | "workspaces"
+  | "rooms"
+  | "hello-from-spaces-bar"
+  | "hello-from-space-panel"
+  | "streamed-hosts-data"
+  | "visited-nodes"
+  | "delete-node-request"
+  | "space-change"
+  | "synced-private-registry"
 
 interface IframesMessage<T = unknown> {
   type: IframesMessageType
@@ -32,7 +42,8 @@ export const sendToIframes = (message: IframesMessage) => {
         // dont sent message to parent, it will fail anyway and pollute the console with error
         return
       }
-      try { // prevent showing errors in console
+      try {
+        // prevent showing errors in console
         window.parent.frames[frameIndex].postMessage(message, targetOrigin)
       } catch (e) {
         console.warn("error sending message to sibling iframe", e) // eslint-disable-line no-console
@@ -42,18 +53,21 @@ export const sendToIframes = (message: IframesMessage) => {
 
 export const useListenToPostMessage = <T>(
   messageType: IframesMessageType,
-  callback?: (newMessage: T) => void,
+  callback?: (newMessage: T) => void
 ) => {
   const [lastMessage, setLastMessage] = useState<T>()
-  const handleMessage = useCallback((message) => {
-    const data = message.data as IframesMessage<T>
-    if (data.type === messageType) {
-      setLastMessage(data.payload)
-      if (callback) {
-        callback(data.payload)
+  const handleMessage = useCallback(
+    (message) => {
+      const data = message.data as IframesMessage<T>
+      if (data.type === messageType) {
+        setLastMessage(data.payload)
+        if (callback) {
+          callback(data.payload)
+        }
       }
-    }
-  }, [callback, messageType])
+    },
+    [callback, messageType]
+  )
   useEffect(() => {
     window.addEventListener("message", handleMessage)
     return () => {

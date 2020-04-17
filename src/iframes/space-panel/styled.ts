@@ -19,7 +19,7 @@ export const PanelSection = styled.section<{ leading?: boolean }>`
   &:not(:first-child) {
     position: relative;
     margin-top: ${({ leading }) => !leading && getSizeBy(2)};
-   
+
     &:before {
       ${({ leading }) => (leading ? "display: none" : "")};
       position: absolute;
