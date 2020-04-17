@@ -2,25 +2,21 @@ import React from "react"
 import { RoomsMessagePayload } from "utils/types"
 
 import { RoomLabel } from "./room-label"
-import {
-  RoomListContainer, RoomAddSection, StyledAnnotation, PlusButton,
-} from "./styled"
+import { RoomListContainer, RoomAddSection, StyledAnnotation, PlusButton } from "./styled"
 
 const mockedWorkspace = {}
 
 interface Props {
   roomsResult: RoomsMessagePayload
 }
-export const SpaceRooms = ({
-  roomsResult,
-}: Props) => {
+export const SpaceRooms = ({ roomsResult }: Props) => {
   const workspace = mockedWorkspace as any
   const userIsAdmin = true
   const isAllowedToCreateRooms = !workspace.createRoomAdminsOnly || userIsAdmin
 
   const handleAddRoom = (e: React.SyntheticEvent<HTMLButtonElement, Event>) => {
     e.preventDefault()
-    // navigate to room creation?, which is not a route in Cloud SPA (TODO make it so)
+    window.top.window.location.href = `/spaces/${roomsResult.spaceSlug}/rooms/general?modal=createRoom`
   }
 
   return (

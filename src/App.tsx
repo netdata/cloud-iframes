@@ -18,15 +18,9 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={DefaultTheme}>
-      {path === SIGN_IN && (
-        <SignInButton />
-      )}
-      {path === SPACE_BAR && (
-        <SpacesBar />
-      )}
-      {path === SPACE_PANEL && (
-        <SpacePanel />
-      )}
+      {path === SIGN_IN && <SignInButton />}
+      {path === SPACE_BAR && <SpacesBar />}
+      {path === SPACE_PANEL && <SpacePanel />}
     </ThemeProvider>
   )
 }

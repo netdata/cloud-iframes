@@ -6,9 +6,7 @@ import { sendToIframes, useListenToPostMessage } from "utils/post-message"
 import { SpacesPayload } from "utils/types"
 import { useFocusDetector } from "hooks/use-focus-detector"
 import { SpaceIcon } from "./components/space-icon"
-import {
-  ListContainer, SpacesList, SeparatedSection, SpacePlaceholder,
-} from "./styled"
+import { ListContainer, SpacesList, SeparatedSection, SpacePlaceholder } from "./styled"
 
 export const SpacesBar = () => {
   useFocusDetector()
@@ -23,7 +21,7 @@ export const SpacesBar = () => {
 
   // duplicated state! if additional logic will be added it's better to use sign-in-button
   // activeSpaceID state
-  const [activeSpaceID, setActiveSpaceID] = useState()
+  const [activeSpaceID, setActiveSpaceID] = useState<string>("")
 
   useEffect(() => {
     if (!activeSpaceID && spacesResult && spacesResult.results.length > 0) {
@@ -63,7 +61,9 @@ export const SpacesBar = () => {
         <Button
           icon="plus"
           onClick={() => {
-            window.top.window.location.href = "/spaces"
+            window.top.window.location.href = `/spaces/${
+              spaces?.[0]?.slug || "any"
+            }/rooms/general?modal=createSpace`
           }}
         />
       </SeparatedSection>

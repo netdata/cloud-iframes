@@ -11,20 +11,19 @@ export const axiosInstance = axios.create({
   },
 })
 
-
 export const useHttp = <T = unknown>(
   url: string | undefined,
-  shouldMakeCall : boolean = true,
-  watchedProperty?: unknown,
+  shouldMakeCall: boolean = true,
+  watchedProperty?: unknown
 ) => {
   const [isFetching, setIsFetching] = useState(false)
   const [isError, setIsError] = useState(false)
   const [data, setData] = useState<T | null>(null)
   useEffect(() => {
     if (shouldMakeCall && url && !isError) {
-
       setIsFetching(true)
-      axiosInstance.get(url)
+      axiosInstance
+        .get(url)
         .then((r) => {
           if (r.data) {
             setData(r.data)
