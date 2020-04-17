@@ -28,10 +28,7 @@ export const RoomLabel = ({ room, spaceSlug }: Props) => {
   return (
     <Container onClick={handleSelectRoom}>
       <StyledIcon name="room" />
-      <RoomName
-        href={href}
-        target="_PARENT"
-      >
+      <RoomName href={href} target="_PARENT">
         {room.name}
       </RoomName>
       <IndicatorsContainer>

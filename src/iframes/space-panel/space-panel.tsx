@@ -9,15 +9,12 @@ import { VisitedNodes } from "./components/visited-nodes"
 import { ReplicatedNodes } from "./components/replicated-nodes"
 import { SpaceRooms } from "./components/space-rooms"
 
-import {
-  ScrollContainer, PanelSection, PanelHeader,
-} from "./styled"
-
+import { ScrollContainer, PanelSection, PanelHeader } from "./styled"
 
 interface StreamedHostsData {
-  masterNodeName: string,
-  masterNodeUrl: string,
-  streamedHosts: { hostname: string, url: string }[],
+  masterNodeName: string
+  masterNodeUrl: string
+  streamedHosts: { hostname: string; url: string }[]
 }
 
 export const SpacePanel = () => {
@@ -50,11 +47,7 @@ export const SpacePanel = () => {
 
   return (
     <ScrollContainer>
-      {roomsResult && (
-        <PanelHeader>
-          {roomsResult.spaceName}
-        </PanelHeader>
-      )}
+      {roomsResult && <PanelHeader>{roomsResult.spaceName}</PanelHeader>}
       {roomsResult && roomsResult.results.length > 0 && (
         <PanelSection leading>
           <SpaceRooms roomsResult={roomsResult} />
@@ -65,12 +58,9 @@ export const SpacePanel = () => {
           <ReplicatedNodes streamedHostsData={streamedHostsData} />
         </PanelSection>
       )}
-      {visitedNodes && (visitedNodes.length > 0) && (
+      {visitedNodes && visitedNodes.length > 0 && (
         <PanelSection>
-          <VisitedNodes
-            onDeleteClick={handleDeleteNode}
-            visitedNodes={visitedNodes}
-          />
+          <VisitedNodes onDeleteClick={handleDeleteNode} visitedNodes={visitedNodes} />
         </PanelSection>
       )}
     </ScrollContainer>

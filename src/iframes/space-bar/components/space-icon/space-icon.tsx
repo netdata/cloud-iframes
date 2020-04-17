@@ -19,9 +19,7 @@ interface Props {
   className?: string
 }
 
-export const SpaceIcon = ({
-  onSpaceIconClick, space, active, className,
-}: Props) => {
+export const SpaceIcon = ({ onSpaceIconClick, space, active, className }: Props) => {
   const [firstLetter, secondLetter] = getSpaceInitials(space.name)
 
   return (

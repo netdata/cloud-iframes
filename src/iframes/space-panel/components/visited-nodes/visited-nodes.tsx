@@ -25,7 +25,7 @@ interface NodeProps {
 }
 const Node = ({ agent: { name, urls }, onDeleteClick, visitNode }: NodeProps) => (
   <CollapsibleList
-    handle={(
+    handle={
       <SimpleListItem
         text={(
           <>
@@ -35,7 +35,7 @@ const Node = ({ agent: { name, urls }, onDeleteClick, visitNode }: NodeProps) =>
         )}
         metaIcon={urls.length && "chevron_right"}
       />
-    )}
+    }
   >
     {urls.map((url: string, i: number) => (
       <ListItem
@@ -66,10 +66,7 @@ interface Props {
   visitedNodes: VisitedNodesT
 }
 
-export const VisitedNodes = ({
-  onDeleteClick,
-  visitedNodes,
-}: Props) => {
+export const VisitedNodes = ({ onDeleteClick, visitedNodes }: Props) => {
   const visitNode = (url: string) => {
     if (url.includes("http://") || url.includes("https://")) {
       window.top.window.location.href = url
@@ -82,11 +79,11 @@ export const VisitedNodes = ({
     <NodesContainer>
       <CollapsibleList
         startOpen
-        handle={(
+        handle={
           <ListHeaderContainer>
             <SimpleListItem metaIcon="chevron_right" text="Visited Nodes" />
           </ListHeaderContainer>
-        )}
+        }
       >
         {visitedNodes.map((agent) => (
           <Node

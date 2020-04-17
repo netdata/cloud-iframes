@@ -1,7 +1,5 @@
 import styled from "styled-components"
-import {
-  H5, getSizeBy, getColor, Icon, TextNano, Text,
-} from "@netdata/netdata-ui"
+import { H5, getSizeBy, getColor, Icon, TextNano, Text } from "@netdata/netdata-ui"
 
 export const NodesContainer = styled.div`
   .mdc-list-item {
@@ -39,11 +37,11 @@ export const ListItem = styled.div`
 `
 
 export const TrashIcon = styled(Icon)`
-  fill: #35414A;
+  fill: #35414a;
   margin-right: ${getSizeBy(2)};
-  transition: opacity .4s ease-in;
+  transition: opacity 0.4s ease-in;
   &:hover {
-    opacity: .6;
+    opacity: 0.6;
   }
 `
 
