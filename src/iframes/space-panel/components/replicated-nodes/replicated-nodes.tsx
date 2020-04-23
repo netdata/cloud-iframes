@@ -26,11 +26,11 @@ export const ReplicatedNodes = ({
   <NodesContainer>
     <CollapsibleList
       startOpen
-      handle={
+      handle={(
         <ListHeaderContainer>
           <SimpleListItem metaIcon="chevron_right" text="Replicated Nodes" />
         </ListHeaderContainer>
-      }
+      )}
     >
       <MasterNodeContainer>
         <StyledIcon size="small" name="nodes" />
