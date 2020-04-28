@@ -5,7 +5,7 @@ import { Button } from "@netdata/netdata-ui"
 import { useHttp, axiosInstance } from "hooks/use-http"
 import { sendToIframes, sendToParent, useListenToPostMessage } from "utils/post-message"
 import {
-  NodesPayload, RoomsPayload, SpacesPayload, RegistryMachine, VisitedNode,
+  NodesPayload, RoomsPayload, SpacesPayload, RegistryMachine, VisitedNode, AlarmsCallPayload,
 } from "utils/types"
 import { getCookie } from "utils/cookies"
 import { useFocusDetector } from "hooks/use-focus-detector"
@@ -86,20 +86,20 @@ export const SignInButton = () => {
   const [spaceID, setSpaceID] = useState()
 
   // fetch rooms of first space and send it to space-panel iframe
-  const firstSpaceId = spaces?.results[0]?.id
+  const firstSpaceID = spaces?.results[0]?.id
   const [rooms, resetRooms] = useHttp<RoomsPayload>(
-    `${cloudApiUrl}spaces/${spaceID || firstSpaceId}/rooms`,
-    Boolean(firstSpaceId),
+    `${cloudApiUrl}spaces/${spaceID || firstSpaceID}/rooms`,
+    Boolean(firstSpaceID),
   )
   useEffect(() => {
     if (rooms && helloFromSpacePanel) {
-      const currentSpace = spaces?.results.find((space) => space.id === (spaceID || firstSpaceId))
+      const currentSpace = spaces?.results.find((space) => space.id === (spaceID || firstSpaceID))
       sendToIframes({
         type: "rooms",
         payload: { ...rooms, spaceSlug: currentSpace?.slug, spaceName: currentSpace?.name },
       })
     }
-  }, [firstSpaceId, helloFromSpacePanel, spaceID, spaces, rooms])
+  }, [firstSpaceID, helloFromSpacePanel, spaceID, spaces, rooms])
 
 
   useListenToPostMessage("space-change", (newSpaceID: string) => {
@@ -218,6 +218,33 @@ export const SignInButton = () => {
       }).then(fetchNodesAgain)
     }
   })
+
+
+  // fetch alarms indicators
+  const currentSpaceID = spaceID || firstSpaceID
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (currentSpaceID) {
+      const makeCall = () => {
+        const getAlarmsUrl = `${cloudApiUrl}spaces/${currentSpaceID}/rooms/alarms`
+        axiosInstance.get<AlarmsCallPayload>(getAlarmsUrl)
+          .then(({ data: alarms }) => {
+            sendToIframes({
+              type: "alarms",
+              payload: alarms.results,
+            })
+          })
+      }
+      const intervalId = setInterval(() => {
+        makeCall()
+      }, 10_000)
+      makeCall()
+
+      return () => {
+        clearInterval(intervalId)
+      }
+    }
+  }, [currentSpaceID])
 
   // logout handling
   const [isMakingLogout, setIsMakingLogout] = useState(false)

@@ -18,6 +18,7 @@ type IframesMessageType =
   | "spaces"
   | "workspaces"
   | "rooms"
+  | "alarms"
   | "hello-from-spaces-bar"
   | "hello-from-space-panel"
   | "streamed-hosts-data"
