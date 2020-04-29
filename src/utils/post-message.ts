@@ -18,6 +18,7 @@ type IframesMessageType =
   | "spaces"
   | "workspaces"
   | "rooms"
+  | "alarms"
   | "hello-from-spaces-bar"
   | "hello-from-space-panel"
   | "streamed-hosts-data"
@@ -53,7 +54,7 @@ export const sendToIframes = (message: IframesMessage) => {
 
 export const useListenToPostMessage = <T>(
   messageType: IframesMessageType,
-  callback?: (newMessage: T) => void
+  callback?: (newMessage: T) => void,
 ) => {
   const [lastMessage, setLastMessage] = useState<T>()
   const handleMessage = useCallback(
@@ -66,7 +67,7 @@ export const useListenToPostMessage = <T>(
         }
       }
     },
-    [callback, messageType]
+    [callback, messageType],
   )
   useEffect(() => {
     window.addEventListener("message", handleMessage)
