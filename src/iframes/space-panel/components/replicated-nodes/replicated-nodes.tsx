@@ -26,21 +26,21 @@ export const ReplicatedNodes = ({
   <NodesContainer>
     <CollapsibleList
       startOpen
-      handle={
+      handle={(
         <ListHeaderContainer>
           <SimpleListItem metaIcon="chevron_right" text="Replicated Nodes" />
         </ListHeaderContainer>
-      }
+      )}
     >
       <MasterNodeContainer>
         <StyledIcon size="small" name="nodes" />
-        <NodeLink href={masterNodeUrl}>{masterNodeName}</NodeLink>
+        <NodeLink href={masterNodeUrl} target="_PARENT">{masterNodeName}</NodeLink>
       </MasterNodeContainer>
       {streamedHosts.map(({ hostname, url }) => (
         // eslint-disable-next-line react/no-array-index-key
         <ListItem key={hostname}>
           <StyledIcon name="node" />
-          <NodeLink href={url}>{hostname}</NodeLink>
+          <NodeLink href={url} target="_PARENT">{hostname}</NodeLink>
         </ListItem>
       ))}
     </CollapsibleList>

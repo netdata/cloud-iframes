@@ -2,7 +2,9 @@ import React from "react"
 import { useMount } from "react-use"
 
 import { sendToParent, sendToIframes, useListenToPostMessage } from "utils/post-message"
-import { VisitedNodes as VisitedNodesT, RoomsMessagePayload } from "utils/types"
+import {
+  VisitedNodes as VisitedNodesT, RoomsMessagePayload, AlarmsMessagePayload,
+} from "utils/types"
 import { useFocusDetector } from "hooks/use-focus-detector"
 
 import { VisitedNodes } from "./components/visited-nodes"
@@ -45,12 +47,14 @@ export const SpacePanel = () => {
     })
   }
 
+  const alarms = useListenToPostMessage<AlarmsMessagePayload>("alarms") || []
+
   return (
     <ScrollContainer>
       {roomsResult && <PanelHeader>{roomsResult.spaceName}</PanelHeader>}
       {roomsResult && roomsResult.results.length > 0 && (
         <PanelSection leading>
-          <SpaceRooms roomsResult={roomsResult} />
+          <SpaceRooms roomsResult={roomsResult} alarms={alarms} />
         </PanelSection>
       )}
       {streamedHostsData && streamedHostsData.streamedHosts.length > 0 && (

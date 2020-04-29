@@ -9,17 +9,19 @@ import {
   UnreachableIndicator,
 } from "./styled"
 
-/* Counters are commented out, but might be used, UI is ready - if we have data */
-// const getAlarmsCount = (count: number) => (count > 99 ? "99+" : `${count}`)
-
 interface Props {
+  alarmCounter: {
+    critical: number
+    warning: number
+  } | undefined
+  unreachableCount: number
   room: any
   spaceSlug: string
 }
 
-export const RoomLabel = ({ room, spaceSlug }: Props) => {
-  const alarmCounter = room.alarmCounter || ({} as any)
-
+export const RoomLabel = ({
+  alarmCounter, room, spaceSlug, unreachableCount,
+}: Props) => {
   const handleSelectRoom = () => {
     // navigate to cloud room
   }
@@ -32,20 +34,14 @@ export const RoomLabel = ({ room, spaceSlug }: Props) => {
         {room.name}
       </RoomName>
       <IndicatorsContainer>
-        {alarmCounter?.critical > 0 && (
-          <ErrorIndicator>
-            {/* <StyledCount>{getAlarmsCount(alarmCounter.critical)}</StyledCount> */}
-          </ErrorIndicator>
+        {alarmCounter && alarmCounter.critical > 0 && (
+          <ErrorIndicator />
         )}
-        {alarmCounter?.warning > 0 && (
-          <WarningIndicator>
-            {/* <StyledCount>{getAlarmsCount(alarmCounter.warning)}</StyledCount> */}
-          </WarningIndicator>
+        {alarmCounter && alarmCounter.warning > 0 && (
+          <WarningIndicator />
         )}
-        {alarmCounter?.unreachable > 0 && (
-          <UnreachableIndicator>
-            {/* <UnreachableCount>{getAlarmsCount(alarmCounter.warning)}</UnreachableCount> */}
-          </UnreachableIndicator>
+        {unreachableCount > 0 && (
+          <UnreachableIndicator />
         )}
       </IndicatorsContainer>
     </Container>

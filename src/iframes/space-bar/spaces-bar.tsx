@@ -6,7 +6,9 @@ import { sendToIframes, useListenToPostMessage } from "utils/post-message"
 import { SpacesPayload } from "utils/types"
 import { useFocusDetector } from "hooks/use-focus-detector"
 import { SpaceIcon } from "./components/space-icon"
-import { ListContainer, SpacesList, SeparatedSection, SpacePlaceholder } from "./styled"
+import {
+  ListContainer, SpacesList, SeparatedSection, SpacePlaceholder,
+} from "./styled"
 
 export const SpacesBar = () => {
   useFocusDetector()

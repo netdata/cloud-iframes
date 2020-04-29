@@ -31,6 +31,21 @@ export interface RoomsPayload {
   }[]
 }
 
+export type AlarmsMessagePayload = {
+  roomID: string
+  alarmCounter: {
+    critical: number
+    warning: number
+  }
+  unreachableCount: number
+  state: string
+}[]
+
+export interface AlarmsCallPayload {
+  updatedAt: string
+  results: AlarmsMessagePayload
+}
+
 export interface VisitedNode {
   id: string
   name: string

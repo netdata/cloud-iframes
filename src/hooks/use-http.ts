@@ -14,7 +14,7 @@ export const axiosInstance = axios.create({
 export const useHttp = <T = unknown>(
   url: string | undefined,
   shouldMakeCall: boolean = true,
-  watchedProperty?: unknown
+  watchedProperty?: unknown,
 ) => {
   const [isFetching, setIsFetching] = useState(false)
   const [isError, setIsError] = useState(false)
