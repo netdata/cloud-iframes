@@ -21,9 +21,8 @@ interface NodeProps {
     urls: string[]
   }
   onDeleteClick: (url: string) => void
-  visitNode: (url: string) => void
 }
-const Node = ({ agent: { name, urls }, onDeleteClick, visitNode }: NodeProps) => (
+const Node = ({ agent: { name, urls }, onDeleteClick }: NodeProps) => (
   <CollapsibleList
     handle={(
       <SimpleListItem
@@ -42,11 +41,7 @@ const Node = ({ agent: { name, urls }, onDeleteClick, visitNode }: NodeProps) =>
         // eslint-disable-next-line react/no-array-index-key
         key={i}
       >
-        <NodeUrl
-          onClick={() => {
-            visitNode(url)
-          }}
-        >
+        <NodeUrl href={url} target="_PARENT">
           {url}
         </NodeUrl>
         <TrashIcon
@@ -66,34 +61,23 @@ interface Props {
   visitedNodes: VisitedNodesT
 }
 
-export const VisitedNodes = ({ onDeleteClick, visitedNodes }: Props) => {
-  const visitNode = (url: string) => {
-    if (url.includes("http://") || url.includes("https://")) {
-      window.top.window.location.href = url
-    } else {
-      window.top.window.location.href = `http://${url}`
-    }
-  }
-
-  return (
-    <NodesContainer>
-      <CollapsibleList
-        startOpen
-        handle={(
-          <ListHeaderContainer>
-            <SimpleListItem metaIcon="chevron_right" text="Visited Nodes" />
-          </ListHeaderContainer>
-        )}
-      >
-        {visitedNodes.map((agent) => (
-          <Node
-            key={agent.id}
-            onDeleteClick={(url) => onDeleteClick(agent.id, url)}
-            visitNode={visitNode}
-            agent={agent}
-          />
-        ))}
-      </CollapsibleList>
-    </NodesContainer>
-  )
-}
+export const VisitedNodes = ({ onDeleteClick, visitedNodes }: Props) => (
+  <NodesContainer>
+    <CollapsibleList
+      startOpen
+      handle={(
+        <ListHeaderContainer>
+          <SimpleListItem metaIcon="chevron_right" text="Visited Nodes" />
+        </ListHeaderContainer>
+      )}
+    >
+      {visitedNodes.map((agent) => (
+        <Node
+          key={agent.id}
+          onDeleteClick={(url) => onDeleteClick(agent.id, url)}
+          agent={agent}
+        />
+      ))}
+    </CollapsibleList>
+  </NodesContainer>
+)

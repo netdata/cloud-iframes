@@ -42,6 +42,7 @@ export const TrashIcon = styled(Icon)`
   fill: #35414a;
   margin-right: ${getSizeBy(2)};
   transition: opacity 0.4s ease-in;
+  flex: 0 0 auto;
   &:hover {
     opacity: 0.6;
   }
@@ -54,10 +55,16 @@ export const StyledIcon = styled(Icon)`
   fill: ${getColor(["text"])};
 `
 
-export const NodeUrl = styled(TextNano)`
+export const NodeUrl = styled(TextNano.withComponent("a"))`
   margin-left: ${getSizeBy(5)};
   font-size: 11px;
   color: #aeb3b7;
+  // we can alternatively consider overflow-wrap: anywhere; which looks nicer but leaves bigger gaps
+  word-break: break-all;
+  text-decoration: none;
+  &:hover {
+    color: inherit; // easiest hover solution for now
+  }
 `
 
 export const NodeName = styled(Text)`
