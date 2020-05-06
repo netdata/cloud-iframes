@@ -153,11 +153,17 @@ export const SignInButton = () => {
   useEffect(() => {
     if (account && nodes && origin && !doneUpsert) {
       setDoneUpsert(true)
-      const nodeCurrentUrls = nodes.results.find((node) => node.id === id)?.urls || []
+      const currentNode = nodes.results.find((node) => node.id === id)
+      const nodeCurrentUrls = currentNode?.urls || []
+      const nodeCurrentName = currentNode?.name || ""
+
       const urls = onlyUnique(
         nodeCurrentUrls.concat(origin).map(decodeURIComponent),
       )
-      if (urls.length === nodeCurrentUrls.length) {
+      if (
+        urls.length === nodeCurrentUrls.length
+        && name === nodeCurrentName
+      ) {
         return
       }
       const upsertUrl = `${cloudApiUrl}accounts/${account.id}/nodes/${id}`
