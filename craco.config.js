@@ -1,5 +1,7 @@
 const isDevelopmentEnvironment = process.env.NODE_ENV === "development"
 
+const isRemoteEnv = process.env.IS_REMOTE_ENV === "true"
+
 module.exports = {
   babel: {
     plugins: ["babel-plugin-styled-components"],
@@ -16,7 +18,7 @@ module.exports = {
       const { oneOf } = loadersObject
       return {
         ...webpackConfig,
-        ...(isDevelopmentEnvironment ? {
+        ...((isDevelopmentEnvironment && !isRemoteEnv) ? {
           output: {
             publicPath: "/sso/",
           },
