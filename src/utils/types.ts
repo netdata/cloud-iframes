@@ -1,14 +1,16 @@
+export interface Space {
+  id: string
+  slug: string
+  name: string
+  description: null | string
+  iconURL: null | string
+  state: string
+  createdAt: string
+}
+
 export interface SpacesPayload {
   updatedAt: string
-  results: {
-    id: string
-    slug: string
-    name: string
-    description: null | string
-    iconURL: null | string
-    state: string
-    createdAt: string
-  }[]
+  results: Space[]
 }
 
 export interface RoomsMessagePayload {
@@ -22,13 +24,15 @@ export interface RoomsMessagePayload {
   }[]
 }
 
+export interface Room {
+  id: string
+  slug: string
+  name: string
+}
+
 export interface RoomsPayload {
   updatedAt: string
-  results: {
-    id: string
-    slug: string
-    name: string
-  }[]
+  results: Room[]
 }
 
 export type AlarmsMessagePayload = {

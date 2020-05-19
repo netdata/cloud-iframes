@@ -1,11 +1,13 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */
 import React, { useCallback, useEffect, useState } from "react"
 import { useMount } from "react-use"
 
 import { Button } from "@netdata/netdata-ui"
 import { useHttp, axiosInstance } from "hooks/use-http"
+import { useHttpPoll } from "hooks/use-http-poll"
 import { sendToIframes, sendToParent, useListenToPostMessage } from "utils/post-message"
 import {
-  NodesPayload, RoomsPayload, SpacesPayload, RegistryMachine, VisitedNode, AlarmsCallPayload,
+  NodesPayload, RegistryMachine, VisitedNode, AlarmsCallPayload, Space, Room,
 } from "utils/types"
 import { getCookie } from "utils/cookies"
 import { useFocusDetector } from "hooks/use-focus-detector"
@@ -72,7 +74,7 @@ export const SignInButton = () => {
   const helloFromSpacePanel = useListenToPostMessage("hello-from-space-panel")
 
   // fetch spaces, and send it to spaces-bar iframe
-  const [spaces, resetSpaces] = useHttp<SpacesPayload>(
+  const [spaces, resetSpaces] = useHttpPoll<Space>(
     `${cloudApiUrl}spaces`,
     Boolean(account) && !disableCloud,
   )
@@ -87,7 +89,7 @@ export const SignInButton = () => {
 
   // fetch rooms of first space and send it to space-panel iframe
   const firstSpaceID = spaces?.results[0]?.id
-  const [rooms, resetRooms] = useHttp<RoomsPayload>(
+  const [rooms, resetRooms] = useHttpPoll<Room>(
     `${cloudApiUrl}spaces/${spaceID || firstSpaceID}/rooms`,
     Boolean(firstSpaceID),
   )
