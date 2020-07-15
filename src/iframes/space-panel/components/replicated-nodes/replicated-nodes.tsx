@@ -4,6 +4,8 @@ import "@material/list/dist/mdc.list.css"
 import "@rmwc/list/collapsible-list.css"
 import "@rmwc/icon/icon.css"
 
+import { alwaysEndWithSlash } from "utils/always-end-with-slash"
+
 import {
   NodesContainer,
   ListItem,
@@ -34,13 +36,18 @@ export const ReplicatedNodes = ({
     >
       <MasterNodeContainer>
         <StyledIcon size="small" name="nodes" />
-        <NodeLink href={masterNodeUrl} target="_PARENT">{masterNodeName}</NodeLink>
+        <NodeLink
+          href={alwaysEndWithSlash(masterNodeUrl)}
+          target="_PARENT"
+        >
+          {masterNodeName}
+        </NodeLink>
       </MasterNodeContainer>
       {streamedHosts.map(({ hostname, url }) => (
         // eslint-disable-next-line react/no-array-index-key
         <ListItem key={hostname}>
           <StyledIcon name="node" />
-          <NodeLink href={url} target="_PARENT">{hostname}</NodeLink>
+          <NodeLink href={alwaysEndWithSlash(url)} target="_PARENT">{hostname}</NodeLink>
         </ListItem>
       ))}
     </CollapsibleList>
