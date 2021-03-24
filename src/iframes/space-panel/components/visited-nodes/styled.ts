@@ -23,7 +23,7 @@ export const NodesContainer = styled.div`
   }
 `
 
-export const ListHeaderContainer = styled(H5.withComponent("div"))`
+export const ListHeaderContainer = styled(H5)`
   text-shadow: unset;
   color: ${getColor(["borderColor"])};
 `
@@ -55,7 +55,7 @@ export const StyledIcon = styled(Icon)`
   fill: ${getColor(["text"])};
 `
 
-export const NodeUrl = styled(TextNano.withComponent("a"))`
+export const NodeUrl = styled(TextNano)`
   margin-left: ${getSizeBy(5)};
   font-size: 11px;
   color: #aeb3b7;

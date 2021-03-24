@@ -26,6 +26,7 @@ type IframesMessageType =
   | "delete-node-request"
   | "space-change"
   | "synced-private-registry"
+  | "sign-out"
 
 interface IframesMessage<T = unknown> {
   type: IframesMessageType

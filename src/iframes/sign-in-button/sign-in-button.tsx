@@ -273,6 +273,9 @@ export const SignInButton = () => {
       })
   }, [resetAccount, resetNodes, resetRooms, resetSpaces])
 
+  useListenToPostMessage("sign-out", () => {
+    handleLogoutClick()
+  });
 
   return (
     <StyledButtonContainer>

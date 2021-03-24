@@ -19,7 +19,7 @@ export const NodesContainer = styled.div`
   }
 `
 
-export const ListHeaderContainer = styled(H5.withComponent("div"))`
+export const ListHeaderContainer = styled(H5)`
   text-shadow: unset;
   color: ${getColor(["borderColor"])};
 `

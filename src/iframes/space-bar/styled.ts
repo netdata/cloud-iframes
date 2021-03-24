@@ -9,7 +9,6 @@ export const ListContainer = styled.div`
   left: 0;
   //height: calc(100vh - 56px);
   width: ${getSizeBy(7)};
-  background: ${getColor(["gray", "limedSpruce"])};
   padding-top: ${getSizeBy(2)};
   display: flex;
   flex-direction: column;
