@@ -41,7 +41,7 @@ const Node = ({ agent: { name, urls }, onDeleteClick }: NodeProps) => (
         // eslint-disable-next-line react/no-array-index-key
         key={i}
       >
-        <NodeUrl href={url} target="_PARENT">
+        <NodeUrl as="a" href={url} target="_PARENT">
           {url}
         </NodeUrl>
         <TrashIcon

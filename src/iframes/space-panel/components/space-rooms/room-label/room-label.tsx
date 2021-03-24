@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import {
   StyledIcon,
   Container,
@@ -7,43 +7,42 @@ import {
   ErrorIndicator,
   WarningIndicator,
   UnreachableIndicator,
-} from "./styled"
+} from "./styled";
 
 interface Props {
-  alarmCounter: {
-    critical: number
-    warning: number
-  } | undefined
-  unreachableCount: number
-  room: any
-  spaceSlug: string
+  alarmCounter:
+    | {
+        critical: number;
+        warning: number;
+      }
+    | undefined;
+  unreachableCount: number;
+  room: any;
+  spaceSlug: string;
 }
 
 export const RoomLabel = ({
-  alarmCounter, room, spaceSlug, unreachableCount,
+  alarmCounter,
+  room,
+  spaceSlug,
+  unreachableCount,
 }: Props) => {
   const handleSelectRoom = () => {
     // navigate to cloud room
-  }
-  const href = `/spaces/${spaceSlug}/rooms/${room.slug}`
+  };
+  const href = `/spaces/${spaceSlug}/rooms/${room.slug}`;
 
   return (
     <Container onClick={handleSelectRoom}>
       <StyledIcon name="room" />
-      <RoomName href={href} target="_PARENT">
+      <RoomName as="a" href={href} target="_PARENT">
         {room.name}
       </RoomName>
       <IndicatorsContainer>
-        {alarmCounter && alarmCounter.critical > 0 && (
-          <ErrorIndicator />
-        )}
-        {alarmCounter && alarmCounter.warning > 0 && (
-          <WarningIndicator />
-        )}
-        {unreachableCount > 0 && (
-          <UnreachableIndicator />
-        )}
+        {alarmCounter && alarmCounter.critical > 0 && <ErrorIndicator />}
+        {alarmCounter && alarmCounter.warning > 0 && <WarningIndicator />}
+        {unreachableCount > 0 && <UnreachableIndicator />}
       </IndicatorsContainer>
     </Container>
-  )
-}
+  );
+};
