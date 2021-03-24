@@ -20,7 +20,7 @@ export const Container = styled.div`
   }
 `
 
-export const RoomName = styled(Text.withComponent("a"))`
+export const RoomName = styled(Text)`
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
