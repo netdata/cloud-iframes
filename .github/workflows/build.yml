@@ -9,25 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Travis CI
-        run: |
-          curl -s -X POST                                         \
-            -H "Content-Type: application/json"                   \
-            -H "Accept: application/json"                         \
-            -H "Travis-API-Version: 3"                            \
-            -H "Authorization: token ${{ secrets.travis_token }}" \
-            -d '{
-              "request": {
-                "message": "Triggered by cloud-iframes",
-                "branch": "develop",
-                "config": {
-                  "merge_mode": "deep_merge",
-                  "env": {
-                    "global": {
-                      "BRANCH": "'${GITHUB_REF#refs/heads/}'"
-                    }
-                  }
-                }
-              }
-            }'                                                    \
-          https://api.travis-ci.com/repo/netdata%2Fcloud-sso/requests
+      - name: Trigger GHA
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          inputs: '{ "BRANCH": "${{ github.ref }}" }'
+          ref: 'develop',
+          repo: netdata/cloud-sso
+          token: ${{ secrets.NETDATABOT_TOKEN }}
+          workflow: main
