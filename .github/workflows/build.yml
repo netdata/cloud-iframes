@@ -13,7 +13,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           inputs: '{ "BRANCH": "${{ github.ref }}" }'
-          ref: 'develop',
+          ref: 'develop'
           repo: netdata/cloud-sso
           token: ${{ secrets.NETDATABOT_TOKEN }}
           workflow: main
