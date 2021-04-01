@@ -4,6 +4,7 @@ import { Text, Flex, Icon, TextInput } from "@netdata/netdata-ui";
 import { MenuList } from "components/menus";
 import { alwaysEndWithSlash } from "utils/always-end-with-slash";
 import Pill from "./pill";
+import Anchor from './anchor'
 import { StyledIcon } from "../../styled";
 
 const Search = styled(TextInput)`
@@ -45,16 +46,15 @@ const ReplicatedNodes = ({
       }
     >
       <Flex column gap={3} padding={[2, 0]}>
-        <Flex
+        <Anchor
           gap={2}
-          as="a"
           href={parentNode.url}
           target="_PARENT"
           padding={[2, 0, 0, 4]}
         >
           <Icon name="nodes" size="small" color="bright" />
           <Text color="bright">{parentNode.hostname}</Text>
-        </Flex>
+        </Anchor>
         {nodes.length >= 5 && (
           <Flex padding={[0, 0, 0, 6]}>
             <Search
@@ -66,8 +66,7 @@ const ReplicatedNodes = ({
           </Flex>
         )}
         {nodes.map(({ hostname, url, status }) => (
-          <Flex
-            as="a"
+          <Anchor
             href={alwaysEndWithSlash(url)}
             target="_PARENT"
             key={hostname}
@@ -85,7 +84,7 @@ const ReplicatedNodes = ({
             <Pill background={status ? "success" : "border"} color="bright">
               {status ? "LIVE" : "OFF"}
             </Pill>
-          </Flex>
+          </Anchor>
         ))}
       </Flex>
     </MenuList>
