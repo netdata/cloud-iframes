@@ -24,6 +24,7 @@ const Node = ({ agent: { name, urls } }, onDeleteClick) => {
     >
       {urls.map((url) => (
         <Flex
+          key={url}
           flex
           alignItems="center"
           justifyContent="between"
@@ -48,4 +49,5 @@ const Node = ({ agent: { name, urls } }, onDeleteClick) => {
     </MenuList>
   );
 };
+
 export default Node;

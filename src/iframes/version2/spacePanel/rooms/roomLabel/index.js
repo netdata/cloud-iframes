@@ -12,7 +12,7 @@ const Indicator = styled(Flex).attrs({
 
 const Container = styled(Flex).attrs({
   alignItems: "center",
-  padding: [0, 0, 0, 2],
+  padding: [0, 2],
   round: true,
 })`
   cursor: pointer;
