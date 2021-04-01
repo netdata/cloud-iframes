@@ -37,7 +37,7 @@ const SpaceRooms = ({ alarms, rooms }) => {
               size="small"
               color="text"
             />
-            <Text>Rooms</Text>
+            <Text>War Rooms</Text>
           </Flex>
           <Button
             small
