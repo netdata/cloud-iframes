@@ -82,7 +82,7 @@ const ReplicatedNodes = ({
               </Text>
             </Flex>
             <Pill background={status ? "success" : "border"} color="bright">
-              {status ? "LIVE" : "OFF"}
+              {status ? "Live" : "Off"}
             </Pill>
           </Anchor>
         ))}

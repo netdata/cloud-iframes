@@ -38,7 +38,7 @@ const SpacePanel = () => {
   };
 
   return (
-    <Flex flex overflow={{ vertical: "auto" }} column>
+    <Flex flex overflow={{ vertical: "auto", horizontal: "hidden" }} column>
       {rooms && <H4>{rooms.spaceName}</H4>}
       {rooms && !!rooms.results.length && (
         <SpaceRooms rooms={rooms} alarms={alarms} />
