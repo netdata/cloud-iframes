@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { Flex, TextMicro } from "@netdata/netdata-ui";
 
 const StyledPill = styled(Flex).attrs({
-  padding: [0.5, 1],
-  round: 1,
+  padding: [0.5, 2],
+  round: 999,
 })`
   cursor: pointer;
 `;
