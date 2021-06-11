@@ -74,15 +74,19 @@ export const SignInButton = () => {
   const helloFromSpacePanel = useListenToPostMessage("hello-from-space-panel")
 
   // fetch spaces, and send it to spaces-bar iframe
-  const [spaces, resetSpaces] = useHttpPoll<Space>(
+  const [spaces, resetSpaces, spacesUpdatedAt] = useHttpPoll<Space>(
     `${cloudApiUrl}spaces`,
     Boolean(account) && !disableCloud,
   )
   useEffect(() => {
     if (spaces && helloFromSpacesBar) {
+      if (!spacesUpdatedAt && Array.isArray(spaces) && !spaces.results.length) {
+        window.open(`${window.location.hostname}/spaces`, "_blank", "noopener,noreferrer")
+        return
+      }
       sendToIframes({ type: "spaces", payload: spaces })
     }
-  }, [helloFromSpacesBar, spaces])
+  }, [helloFromSpacesBar, spaces, spacesUpdatedAt])
 
 
   const [spaceID, setSpaceID] = useState()
