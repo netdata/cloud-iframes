@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useMount } from "react-use"
 import { Button } from "@netdata/netdata-ui"
 
@@ -20,6 +20,11 @@ export const SpacesBar = () => {
   })
   const spacesResult = useListenToPostMessage<SpacesPayload>("spaces")
   const spaces = spacesResult?.results
+
+  const plusButtonRef = useRef<any>()
+  useEffect(() => {
+    if (spacesResult && !spacesResult.results.length) plusButtonRef.current.click()
+  }, [spacesResult])
 
   // duplicated state! if additional logic will be added it's better to use sign-in-button
   // activeSpaceID state
@@ -61,6 +66,7 @@ export const SpacesBar = () => {
 
       <SeparatedSection>
         <Button
+          ref={plusButtonRef}
           icon="plus"
           onClick={() => {
             window.top.window.location.href = `/spaces/${

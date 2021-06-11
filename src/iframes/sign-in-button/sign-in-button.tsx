@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useEffect,
   useState,
-  useRef,
 } from "react"
 import { useMount } from "react-use"
 
@@ -79,21 +78,16 @@ export const SignInButton = () => {
   const helloFromSpacePanel = useListenToPostMessage("hello-from-space-panel")
 
   // fetch spaces, and send it to spaces-bar iframe
-  const [spaces, resetSpaces, spacesUpdatedAt] = useHttpPoll<Space>(
+  const [spaces, resetSpaces] = useHttpPoll<Space>(
     `${cloudApiUrl}spaces`,
     Boolean(account) && !disableCloud,
   )
 
-  const goToCloudRef = useRef<any>()
   useEffect(() => {
-    if (!spacesUpdatedAt && !!spaces && !spaces.results.length && goToCloudRef.current) {
-      goToCloudRef.current.click()
-      return
-    }
     if (spaces && helloFromSpacesBar) {
       sendToIframes({ type: "spaces", payload: spaces })
     }
-  }, [helloFromSpacesBar, spaces, spacesUpdatedAt])
+  }, [helloFromSpacesBar, spaces])
 
 
   const [spaceID, setSpaceID] = useState()
@@ -284,7 +278,7 @@ export const SignInButton = () => {
       })
   }, [resetAccount, resetNodes, resetRooms, resetSpaces])
 
-  useListenToPostMessage("sign-out", handleLogoutClick);
+  useListenToPostMessage("sign-out", handleLogoutClick)
 
   return (
     <StyledButtonContainer>
@@ -303,17 +297,6 @@ export const SignInButton = () => {
             SIGN-IN
           </StyledSignInButton>
         )}
-      <button
-        type="button"
-        ref={goToCloudRef}
-        style={{ display: "none" }}
-        className="go-to-cloud"
-        onClick={() => {
-          window.top.window.location.href = "/spaces/any/rooms/general?modal=createSpace"
-        }}
-      >
-        Go to cloud
-      </button>
     </StyledButtonContainer>
   )
 }
