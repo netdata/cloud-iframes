@@ -80,8 +80,8 @@ export const SignInButton = () => {
   )
   useEffect(() => {
     if (!spacesUpdatedAt && !!spaces && !spaces.results.length) {
-      window.location.href = `${window.location.protocol}//${window.location.hostname}/spaces`
-      return
+      // parent.document.location.href = `${window.location.protocol}//${window.location.hostname}/spaces`
+      // return
     }
     if (spaces && helloFromSpacesBar) {
       sendToIframes({ type: "spaces", payload: spaces })
