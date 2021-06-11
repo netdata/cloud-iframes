@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { useInterval } from "react-use"
+import { useInterval, usePrevious } from "react-use"
 import { stateBasedArrayMerge } from "utils/state-handler"
 import { axiosInstance } from "hooks/use-http"
 
@@ -23,7 +23,7 @@ export const useHttpPoll = <T>(
   pollInterval: number = DEFAULT_POLL_INTERVAL,
 ) => {
   const [lastUpdated, setLastUpdated] = useState<string>()
-
+  const prevLastUpdated = usePrevious<string>()
   const [mergedData, setMergedData] = useState<RequestResult<T>>()
 
   const [hasStarted, setHasStarted] = useState<boolean>()
@@ -58,6 +58,7 @@ export const useHttpPoll = <T>(
             ...response.data,
             results: mergedArray,
           })
+          prevLastUpdated.current = lastUpdated
           setLastUpdated(response.data.updatedAt)
         }
       })
@@ -66,5 +67,9 @@ export const useHttpPoll = <T>(
     setMergedData(undefined)
   }, [])
 
-  return [mergedData, resetCallback, lastUpdated] as [RequestResult<T> | null, () => void, string]
+  return [
+    mergedData,
+    resetCallback,
+    prevLastUpdated.current,
+  ] as [RequestResult<T> | null, () => void, string]
 }
