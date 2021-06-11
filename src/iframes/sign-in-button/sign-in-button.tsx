@@ -79,6 +79,10 @@ export const SignInButton = () => {
     Boolean(account) && !disableCloud,
   )
   useEffect(() => {
+    if (Array.isArray(spaces) && !spaces.length) {
+      window.open(`${window.location.hostname}/spaces`, "_blank", "noopener,noreferrer")
+      return
+    }
     if (spaces && helloFromSpacesBar) {
       sendToIframes({ type: "spaces", payload: spaces })
     }
