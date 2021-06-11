@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */
-import React, { useCallback, useEffect, useState } from "react"
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+} from "react"
 import { useMount } from "react-use"
 
 import { Button } from "@netdata/netdata-ui"
@@ -78,9 +83,11 @@ export const SignInButton = () => {
     `${cloudApiUrl}spaces`,
     Boolean(account) && !disableCloud,
   )
+
+  const goToCloudRef = useRef<any>()
   useEffect(() => {
-    if (!spacesUpdatedAt && !!spaces && !spaces.results.length) {
-      window.top.window.location.href = "/spaces/any/rooms/general?modal=createSpace"
+    if (!spacesUpdatedAt && !!spaces && !spaces.results.length && goToCloudRef.current) {
+      goToCloudRef.current.click()
       return
     }
     if (spaces && helloFromSpacesBar) {
@@ -296,6 +303,17 @@ export const SignInButton = () => {
             SIGN-IN
           </StyledSignInButton>
         )}
+      <button
+        type="button"
+        ref={goToCloudRef}
+        style={{ display: "none" }}
+        className="go-to-cloud"
+        onClick={() => {
+          window.top.window.location.href = "/spaces/any/rooms/general?modal=createSpace"
+        }}
+      >
+        Go to cloud
+      </button>
     </StyledButtonContainer>
   )
 }
