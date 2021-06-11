@@ -23,7 +23,7 @@ export const useHttpPoll = <T>(
   pollInterval: number = DEFAULT_POLL_INTERVAL,
 ) => {
   const [lastUpdated, setLastUpdated] = useState<string>()
-  const prevLastUpdated = usePrevious<string>(lastUpdated)
+  const prevLastUpdated = usePrevious<string | undefined>(lastUpdated)
   const [mergedData, setMergedData] = useState<RequestResult<T>>()
 
   const [hasStarted, setHasStarted] = useState<boolean>()
