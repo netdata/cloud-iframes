@@ -66,5 +66,5 @@ export const useHttpPoll = <T>(
     setMergedData(undefined)
   }, [])
 
-  return [mergedData, resetCallback] as [RequestResult<T> | null, () => void]
+  return [mergedData, resetCallback, lastUpdated] as [RequestResult<T> | null, () => void, string]
 }
