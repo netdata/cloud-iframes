@@ -15,5 +15,5 @@ jobs:
           inputs: '{ "BRANCH": "${{ github.ref }}" }'
           ref: 'develop'
           repo: netdata/cloud-sso
-          token: ${{ secrets.NETDATABOT_TOKEN }}
+          token: ${{ secrets.NETDATABOT_GITHUB_TOKEN }}
           workflow: main
