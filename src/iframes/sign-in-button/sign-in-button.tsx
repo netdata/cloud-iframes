@@ -80,7 +80,7 @@ export const SignInButton = () => {
   )
   useEffect(() => {
     if (!spacesUpdatedAt && !!spaces && !spaces.results.length) {
-      window.top.location.href = `${window.location.hostname}/spaces`
+      window.location.href = `${window.location.protocol}//${window.location.hostname}/spaces`
       return
     }
     if (spaces && helloFromSpacesBar) {
