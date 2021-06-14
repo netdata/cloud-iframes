@@ -292,7 +292,7 @@ export const SignInButton = () => {
         ) : (
           <StyledSignInButton
             href={cloudSignInUrl}
-            target="_PARENT"
+            target="_blank"
           >
             SIGN-IN
           </StyledSignInButton>
