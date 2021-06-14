@@ -1,5 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */
-import React, { useCallback, useEffect, useState } from "react"
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from "react"
 import { useMount } from "react-use"
 
 import { Button } from "@netdata/netdata-ui"
@@ -74,19 +78,16 @@ export const SignInButton = () => {
   const helloFromSpacePanel = useListenToPostMessage("hello-from-space-panel")
 
   // fetch spaces, and send it to spaces-bar iframe
-  const [spaces, resetSpaces, spacesUpdatedAt] = useHttpPoll<Space>(
+  const [spaces, resetSpaces] = useHttpPoll<Space>(
     `${cloudApiUrl}spaces`,
     Boolean(account) && !disableCloud,
   )
+
   useEffect(() => {
-    if (!spacesUpdatedAt && !!spaces && !spaces.results.length) {
-      window.location.href = `${window.location.protocol}//${window.location.hostname}/spaces`
-      return
-    }
     if (spaces && helloFromSpacesBar) {
       sendToIframes({ type: "spaces", payload: spaces })
     }
-  }, [helloFromSpacesBar, spaces, spacesUpdatedAt])
+  }, [helloFromSpacesBar, spaces])
 
 
   const [spaceID, setSpaceID] = useState()
@@ -277,7 +278,7 @@ export const SignInButton = () => {
       })
   }, [resetAccount, resetNodes, resetRooms, resetSpaces])
 
-  useListenToPostMessage("sign-out", handleLogoutClick);
+  useListenToPostMessage("sign-out", handleLogoutClick)
 
   return (
     <StyledButtonContainer>
@@ -291,7 +292,7 @@ export const SignInButton = () => {
         ) : (
           <StyledSignInButton
             href={cloudSignInUrl}
-            target="_PARENT"
+            target="_blank"
           >
             SIGN-IN
           </StyledSignInButton>
