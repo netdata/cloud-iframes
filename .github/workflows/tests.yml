@@ -2,12 +2,12 @@
 name: tests
 
 on:
-  pull_request:
   push:
+    branches: [master, develop]
   workflow_dispatch:
     inputs:
 concurrency:
-  group: cloud-iframes-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: "12.22.0"
+          node-version: "12.x"
           cache: "npm"
       - name: Install dependencies
         run: npm install
