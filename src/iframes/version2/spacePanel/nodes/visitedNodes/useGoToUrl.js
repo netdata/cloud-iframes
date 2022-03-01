@@ -29,7 +29,7 @@ const findValidUrl = async (urls, { spaces = [], nodeId }) => {
 
   if (cloudUrl) return cloudUrl
 
-  const agentUrls = urls.filter(url => !/netdata\.cloud\//.test(url))
+  const agentUrls = urls.filter(url => !/\/\/\w*\.netdata\.cloud\//.test(url))
 
   if (agentUrls.length) {
     return await Promise.any(
