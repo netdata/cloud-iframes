@@ -25,6 +25,8 @@ const SpacePanel = () => {
   const streamedHostsData = useListenToPostMessage("streamed-hosts-data")
   const visitedNodes = useListenToPostMessage("visited-nodes")
   const alarms = useListenToPostMessage("alarms") || []
+  const spacesResult = useListenToPostMessage("spaces")
+  const spaces = spacesResult?.results
 
   const handleDeleteNode = (nodeId, url) => {
     sendToIframes({
@@ -41,7 +43,11 @@ const SpacePanel = () => {
         <ReplicatedNodes replicatedNodes={streamedHostsData} />
       )}
       {visitedNodes && visitedNodes.length > 0 && (
-        <VisitedNodes onDeleteClick={handleDeleteNode} visitedNodes={visitedNodes} />
+        <VisitedNodes
+          onDeleteClick={handleDeleteNode}
+          visitedNodes={visitedNodes}
+          spaces={spaces}
+        />
       )}
     </Flex>
   )
