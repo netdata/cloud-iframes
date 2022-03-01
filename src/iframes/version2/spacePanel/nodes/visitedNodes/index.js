@@ -30,7 +30,7 @@ const VisitedNodes = ({ onDeleteClick, visitedNodes, spaces }) => {
         {visitedNodes.map(agent => (
           <Node
             key={agent.id}
-            onDeleteClick={url => onDeleteClick(agent.id, url)}
+            onDeleteClick={onDeleteClick}
             agent={agent}
             selectedId={selectedId}
             setSelectedId={setSelectedId}
