@@ -82,8 +82,7 @@ export const SignInButton = () => {
     if (spaces && helloFromSpacesBar) {
       sendToIframes({ type: "spaces", payload: spaces })
     }
-  }, [helloFromSpacesBar, spaces])
-
+  }, [helloFromSpacesBar, spaces, helloFromSpacePanel])
 
   const [spaceID, setSpaceID] = useState()
 

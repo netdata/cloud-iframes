@@ -5,7 +5,7 @@ import { MenuList } from "components/menus"
 import { StyledIcon } from "../../styled"
 import Node from "./node"
 
-const VisitedNodes = ({ onDeleteClick, visitedNodes }) => {
+const VisitedNodes = ({ onDeleteClick, visitedNodes, spaces }) => {
   const [listOpen, toggleListOpen] = useToggle(visitedNodes.length > 0)
 
   const [selectedId, setSelectedId] = useState()
@@ -34,6 +34,7 @@ const VisitedNodes = ({ onDeleteClick, visitedNodes }) => {
             agent={agent}
             selectedId={selectedId}
             setSelectedId={setSelectedId}
+            spaces={spaces}
           />
         ))}
       </Flex>

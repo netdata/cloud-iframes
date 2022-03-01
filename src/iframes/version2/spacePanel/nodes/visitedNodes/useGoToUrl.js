@@ -51,12 +51,8 @@ export const visitNode = url => {
   window.open(url, "_blank")
 }
 
-const useGoToUrl = (id, urls, { openList, setSelectedId } = {}) => {
+const useGoToUrl = (id, urls, { openList, setSelectedId, spaces } = {}) => {
   const validUrlRef = useRef()
-  // const spaceIds = useSpacesValue("ids") // todo
-  const spaceIds = []
-  // const spaces = useGetSpaces(spaceIds) // todo
-  const spaces = []
 
   return useCallback(async () => {
     setSelectedId(id)
