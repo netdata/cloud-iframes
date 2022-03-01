@@ -28,10 +28,10 @@ const SpacePanel = () => {
   const spacesResult = useListenToPostMessage("spaces")
   const spaces = spacesResult?.results
 
-  const handleDeleteNode = (nodeId, url) => {
+  const handleDeleteNode = (nodeID, url) => {
     sendToIframes({
       type: "delete-node-request",
-      payload: { nodeId, url },
+      payload: { nodeID, url },
     })
   }
 

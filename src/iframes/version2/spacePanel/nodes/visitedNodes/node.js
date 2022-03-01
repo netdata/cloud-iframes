@@ -8,8 +8,6 @@ import useGoToUrl, { visitNode } from "./useGoToUrl"
 
 const Node = ({ agent: { id, name, urls }, onDeleteClick, selectedId, setSelectedId, spaces }) => {
   const [listOpen, , open, close] = useToggle()
-  // const removeUrl = useVisitedNodeRemoveUrl()
-  const removeUrl = () => {} // todo
   const goToUrl = useGoToUrl(id, urls, { openList: open, setSelectedId, spaces })
   const onNodeClick = useCallback(() => {
     if (listOpen) {
@@ -56,7 +54,7 @@ const Node = ({ agent: { id, name, urls }, onDeleteClick, selectedId, setSelecte
                     color="text"
                     onClick={e => {
                       e.stopPropagation()
-                      removeUrl(id, url)
+                      onDeleteClick(id, url)
                     }}
                     width="16px"
                     height="16px"
