@@ -12,6 +12,10 @@ export const PanelRowContainer = styled(Flex)`
   ${props => props.selected && `background: ${getColor("selected")(props)};`}
 `
 
+const StyledIcon = styled(Icon)`
+  flex: 0 0 auto;
+`
+
 const MenuItem = forwardRef(
   (
     {
@@ -21,7 +25,7 @@ const MenuItem = forwardRef(
       onClick,
       testid,
       icon,
-      padding = [2, 3],
+      padding = [2, 4],
       margin = [0],
       round = 0,
       actions,
@@ -52,7 +56,7 @@ const MenuItem = forwardRef(
       >
         <Flex alignItems="center" gap={3} flex basis="">
           {typeof icon === "string" ? (
-            <Icon name={icon} disabled={disabled} color="text" height="16px" width="16px" />
+            <StyledIcon name={icon} disabled={disabled} color="text" height="16px" width="16px" />
           ) : (
             icon
           )}
