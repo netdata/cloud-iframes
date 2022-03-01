@@ -42,12 +42,10 @@ const NodeOld = ({ agent: { name, urls } }, onDeleteClick) => {
   )
 }
 
-const Node = ({ agent: { id, name, urls }, onDeleteClick, setSelectedId }) => {
+const Node = ({ agent: { id, name, urls }, onDeleteClick, selectedId, setSelectedId }) => {
   const [listOpen, , open, close] = useToggle()
   // const removeUrl = useVisitedNodeRemoveUrl()
   const removeUrl = () => {} // todo
-  //
-  // const urls = useNodeStateValue(id, "urls")
   const goToUrl = useGoToUrl(id, urls, { openList: open, setSelectedId })
   const onNodeClick = useCallback(() => {
     if (listOpen) {
@@ -55,7 +53,9 @@ const Node = ({ agent: { id, name, urls }, onDeleteClick, setSelectedId }) => {
     } else {
       goToUrl()
     }
-  }, [listOpen])
+  }, [listOpen, goToUrl])
+
+  const selected = selectedId === id
 
   const visitNode = () => {
     // todo
@@ -70,6 +70,9 @@ const Node = ({ agent: { id, name, urls }, onDeleteClick, setSelectedId }) => {
         padding={[1.5, 4, 1.5, 2]}
         round={1}
         testid={`visitedNodes-${name}`}
+        disabled={!!selectedId && !selected}
+        selected={selected}
+        loading={selected}
       >
         {name}
       </MenuItem>
