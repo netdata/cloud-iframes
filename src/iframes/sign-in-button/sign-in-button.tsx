@@ -1,9 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useMount } from "react-use"
 
 import { Button } from "@netdata/netdata-ui"
@@ -11,7 +7,12 @@ import { useHttp, axiosInstance } from "hooks/use-http"
 import { useHttpPoll } from "hooks/use-http-poll"
 import { sendToIframes, sendToParent, useListenToPostMessage } from "utils/post-message"
 import {
-  NodesPayload, RegistryMachine, VisitedNode, AlarmsCallPayload, Space, Room,
+  NodesPayload,
+  RegistryMachine,
+  VisitedNode,
+  AlarmsCallPayload,
+  Space,
+  Room,
 } from "utils/types"
 import { getCookie } from "utils/cookies"
 import { useFocusDetector } from "hooks/use-focus-detector"
@@ -29,16 +30,14 @@ interface AccountsMePayload {
   createdAt: string
 }
 
-const onlyUnique = <T extends unknown>(array: T[]) => array
-  .filter((value, index, self) => self.indexOf(value) === index)
+const onlyUnique = <T extends unknown>(array: T[]) =>
+  array.filter((value, index, self) => self.indexOf(value) === index)
 
 export const SignInButton = () => {
   useFocusDetector()
 
   const cookieTokenExpiresAt = getCookie(TOKEN_EXPIRES_AT) as string
-  const expiresAtDecoded = decodeURIComponent(
-    decodeURIComponent(cookieTokenExpiresAt),
-  )
+  const expiresAtDecoded = decodeURIComponent(decodeURIComponent(cookieTokenExpiresAt))
   const now = new Date().valueOf()
   const expirationDate = new Date(expiresAtDecoded).valueOf()
   const hasStillCookie = expirationDate > now
@@ -53,11 +52,8 @@ export const SignInButton = () => {
     })
   })
 
-
   // always fetch account, to check if user is logged in
-  const [account, resetAccount] = useHttp<AccountsMePayload>(
-    `${cloudApiUrl}accounts/me`,
-  )
+  const [account, resetAccount] = useHttp<AccountsMePayload>(`${cloudApiUrl}accounts/me`)
   const accoundID = account?.id
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -71,7 +67,6 @@ export const SignInButton = () => {
     }
   }, [account])
 
-
   // wait for other iframes to init and send signal, meaning that they're waiting for data
   // when user is sign out, they are not active
   const helloFromSpacesBar = useListenToPostMessage("hello-from-spaces-bar")
@@ -80,7 +75,7 @@ export const SignInButton = () => {
   // fetch spaces, and send it to spaces-bar iframe
   const [spaces, resetSpaces] = useHttpPoll<Space>(
     `${cloudApiUrl}spaces`,
-    Boolean(account) && !disableCloud,
+    Boolean(account) && !disableCloud
   )
 
   useEffect(() => {
@@ -96,11 +91,11 @@ export const SignInButton = () => {
   const firstSpaceID = spaces?.results[0]?.id
   const [rooms, resetRooms] = useHttpPoll<Room>(
     `${cloudApiUrl}spaces/${spaceID || firstSpaceID}/rooms`,
-    Boolean(firstSpaceID),
+    Boolean(firstSpaceID)
   )
   useEffect(() => {
     if (rooms && helloFromSpacePanel) {
-      const currentSpace = spaces?.results.find((space) => space.id === (spaceID || firstSpaceID))
+      const currentSpace = spaces?.results.find(space => space.id === (spaceID || firstSpaceID))
       sendToIframes({
         type: "rooms",
         payload: { ...rooms, spaceSlug: currentSpace?.slug, spaceName: currentSpace?.name },
@@ -108,19 +103,16 @@ export const SignInButton = () => {
     }
   }, [firstSpaceID, helloFromSpacePanel, spaceID, spaces, rooms])
 
-
   useListenToPostMessage("space-change", (newSpaceID: string) => {
     setSpaceID(newSpaceID)
   })
-
 
   const redirectUri = encodeURIComponent(document.referrer)
   const id = query.get("id")
   const name = query.get("name")
   const origin = query.get("origin")
-  const cloudSignInUrl = "/sign-in"
-    + `?id=${id}&name=${name}&origin=${origin}&redirect_uri=${redirectUri}`
-
+  const cloudSignInUrl =
+    "/sign-in" + `?id=${id}&name=${name}&origin=${origin}&redirect_uri=${redirectUri}`
 
   // touch a node
   useEffect(() => {
@@ -131,19 +123,17 @@ export const SignInButton = () => {
     }
   }, [accoundID, id])
 
-
   // a hack to trigger /nodes call again
   const [nodesCallID, setNodesCallID] = useState()
   const fetchNodesAgain = () => {
     setNodesCallID(Math.random())
   }
 
-
   // fetch visited nodes
   const [nodes, resetNodes] = useHttp<NodesPayload>(
     `${cloudApiUrl}accounts/${account?.id}/nodes`,
     Boolean(account),
-    nodesCallID, // update also when it changes
+    nodesCallID // update also when it changes
   )
   useEffect(() => {
     if (nodes && helloFromSpacePanel && account) {
@@ -154,33 +144,28 @@ export const SignInButton = () => {
     }
   }, [account, helloFromSpacePanel, nodes])
 
-
   // upsert a node
   const [doneUpsert, setDoneUpsert] = useState(false)
   useEffect(() => {
     if (account && nodes && origin && !doneUpsert) {
       setDoneUpsert(true)
-      const currentNode = nodes.results.find((node) => node.id === id)
+      const currentNode = nodes.results.find(node => node.id === id)
       const nodeCurrentUrls = currentNode?.urls || []
       const nodeCurrentName = currentNode?.name || ""
 
-      const urls = onlyUnique(
-        nodeCurrentUrls.concat(origin).map(decodeURIComponent),
-      )
-      if (
-        urls.length === nodeCurrentUrls.length
-        && name === nodeCurrentName
-      ) {
+      const urls = onlyUnique(nodeCurrentUrls.concat(origin).map(decodeURIComponent))
+      if (urls.length === nodeCurrentUrls.length && name === nodeCurrentName) {
         return
       }
       const upsertUrl = `${cloudApiUrl}accounts/${account.id}/nodes/${id}`
-      axiosInstance.put(upsertUrl, {
-        name,
-        urls,
-      }).then(fetchNodesAgain)
+      axiosInstance
+        .put(upsertUrl, {
+          name,
+          urls,
+        })
+        .then(fetchNodesAgain)
     }
   }, [account, doneUpsert, id, name, nodes, origin])
-
 
   // sync private registry
   const privateRegistryNodes = useListenToPostMessage<RegistryMachine[]>("synced-private-registry")
@@ -188,50 +173,55 @@ export const SignInButton = () => {
   useEffect(() => {
     if (!privateRegistrySynced && nodes && privateRegistryNodes) {
       setPrivateRegistrySynced(true)
-      Promise.all(privateRegistryNodes.map((privateRegistryNode) => {
-        const nodeID = privateRegistryNode.guid
-        const nodeCurrentUrls = nodes.results
-          .find((node) => node.id === nodeID)?.urls || []
-        const upsertUrl = `${cloudApiUrl}accounts/${account?.id}/nodes/${nodeID}`
-        const urls = onlyUnique(
-          nodeCurrentUrls.concat(privateRegistryNode.alternateUrls).map(decodeURIComponent),
-        )
-        return axiosInstance.put(upsertUrl, {
-          name: privateRegistryNode.name,
-          urls,
-        }).catch((error) => {
-          // eslint-disable-next-line no-console
-          console.warn("Error syncing visited node", privateRegistryNode.name, error)
+      Promise.all(
+        privateRegistryNodes.map(privateRegistryNode => {
+          const nodeID = privateRegistryNode.guid
+          const nodeCurrentUrls = nodes.results.find(node => node.id === nodeID)?.urls || []
+          const upsertUrl = `${cloudApiUrl}accounts/${account?.id}/nodes/${nodeID}`
+          const urls = onlyUnique(
+            nodeCurrentUrls.concat(privateRegistryNode.alternateUrls).map(decodeURIComponent)
+          )
+          return axiosInstance
+            .put(upsertUrl, {
+              name: privateRegistryNode.name,
+              urls,
+            })
+            .catch(error => {
+              // eslint-disable-next-line no-console
+              console.warn("Error syncing visited node", privateRegistryNode.name, error)
+            })
         })
-      })).then(fetchNodesAgain)
+      ).then(fetchNodesAgain)
     }
   }, [account, nodes, privateRegistryNodes, privateRegistrySynced])
 
-
-  interface DeleteNodeRequestPayload { nodeID: string, url: string }
+  interface DeleteNodeRequestPayload {
+    nodeID: string
+    url: string
+  }
   useListenToPostMessage<DeleteNodeRequestPayload>("delete-node-request", ({ nodeID, url }) => {
     const accountID = (account as AccountsMePayload).id
     if (!nodes) {
       console.warn("Error during delete-node-request, no nodes present") // eslint-disable-line
       return
     }
-    const node = nodes.results.find((n) => n.id === nodeID) as VisitedNode
+    const node = nodes.results.find(n => n.id === nodeID) as VisitedNode
     const nodeUrls = node.urls || []
-    const newNodeUrls = nodeUrls.filter((u) => u !== url)
+    const newNodeUrls = nodeUrls.filter(u => u !== url)
     if (newNodeUrls.length === 0) {
       // delete node
       const deleteNodeUrl = `${cloudApiUrl}accounts/${accountID}/nodes?node_ids=${nodeID}`
-      axiosInstance.delete(deleteNodeUrl)
-        .then(fetchNodesAgain)
+      axiosInstance.delete(deleteNodeUrl).then(fetchNodesAgain)
     } else {
       const upsertUrl = `${cloudApiUrl}accounts/${account?.id}/nodes/${nodeID}`
-      axiosInstance.put(upsertUrl, {
-        name: node.name,
-        urls: newNodeUrls,
-      }).then(fetchNodesAgain)
+      axiosInstance
+        .put(upsertUrl, {
+          name: node.name,
+          urls: newNodeUrls,
+        })
+        .then(fetchNodesAgain)
     }
   })
-
 
   // fetch alarms indicators
   const currentSpaceID = spaceID || firstSpaceID
@@ -240,13 +230,12 @@ export const SignInButton = () => {
     if (currentSpaceID) {
       const makeCall = () => {
         const getAlarmsUrl = `${cloudApiUrl}spaces/${currentSpaceID}/rooms/alarms`
-        axiosInstance.get<AlarmsCallPayload>(getAlarmsUrl)
-          .then(({ data: alarms }) => {
-            sendToIframes({
-              type: "alarms",
-              payload: alarms.results,
-            })
+        axiosInstance.get<AlarmsCallPayload>(getAlarmsUrl).then(({ data: alarms }) => {
+          sendToIframes({
+            type: "alarms",
+            payload: alarms.results,
           })
+        })
       }
       const intervalId = setInterval(() => {
         makeCall()
@@ -264,7 +253,8 @@ export const SignInButton = () => {
   const handleLogoutClick = useCallback(() => {
     const logoutUrl = `${cloudApiUrl}auth/account/logout`
     setIsMakingLogout(true)
-    axiosInstance.post(logoutUrl, {})
+    axiosInstance
+      .post(logoutUrl, {})
       .then(() => {
         setIsMakingLogout(true)
         resetAccount()
@@ -272,7 +262,8 @@ export const SignInButton = () => {
         resetRooms()
         resetNodes()
         setIsLoggedIn(false)
-      }).catch((e) => {
+      })
+      .catch(e => {
         console.warn("error during logout", e) // eslint-disable-line no-console
         setIsMakingLogout(false)
       })
@@ -282,21 +273,13 @@ export const SignInButton = () => {
 
   return (
     <StyledButtonContainer>
-      {isLoggedIn
-        ? (
-          <Button
-            isLoading={isMakingLogout}
-            label="Sign out"
-            onClick={handleLogoutClick}
-          />
-        ) : (
-          <StyledSignInButton
-            href={cloudSignInUrl}
-            target="_blank"
-          >
-            SIGN-IN
-          </StyledSignInButton>
-        )}
+      {isLoggedIn ? (
+        <Button isLoading={isMakingLogout} label="Sign out" onClick={handleLogoutClick} />
+      ) : (
+        <StyledSignInButton href={cloudSignInUrl} target="_blank">
+          SIGN-IN
+        </StyledSignInButton>
+      )}
     </StyledButtonContainer>
   )
 }
