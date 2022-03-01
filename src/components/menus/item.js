@@ -1,6 +1,6 @@
 import React, { useCallback, forwardRef } from "react"
 import styled from "styled-components"
-import { getColor, Flex, Icon, Text } from "@netdata/netdata-ui"
+import { getColor, Flex, Icon, Text, IconComponents } from "@netdata/netdata-ui"
 
 export const PanelRowContainer = styled(Flex)`
   cursor: pointer;
@@ -14,6 +14,14 @@ export const PanelRowContainer = styled(Flex)`
 
 const StyledIcon = styled(Icon)`
   flex: 0 0 auto;
+  height: 16px;
+  width: 16px;
+`
+
+const StyledLoaderIcon = styled(IconComponents.LoaderIcon)`
+  flex: 0 0 auto;
+  height: 16px;
+  width: 16px;
 `
 
 const MenuItem = forwardRef(
@@ -30,6 +38,7 @@ const MenuItem = forwardRef(
       round = 0,
       actions,
       selected,
+      loading,
       width = "100%",
     },
     ref
@@ -55,7 +64,9 @@ const MenuItem = forwardRef(
         disabled={disabled}
       >
         <Flex alignItems="center" gap={3} flex basis="">
-          {typeof icon === "string" ? (
+          {loading ? (
+            <StyledLoaderIcon />
+          ) : typeof icon === "string" ? (
             <StyledIcon name={icon} disabled={disabled} color="text" height="16px" width="16px" />
           ) : (
             icon
