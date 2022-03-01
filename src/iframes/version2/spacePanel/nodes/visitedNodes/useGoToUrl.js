@@ -45,15 +45,10 @@ const findValidUrl = async (urls, { spaces = [], nodeId }) => {
   return
 }
 
-const visitNode = url => {
-  console.log("VISIT NODE", url) // eslint-disable-line no-console
+export const visitNode = url => {
   if (!/https?:\/\//.test(url)) url = `http://${url}`
 
-  if (/netdata\.cloud\//.test(url)) {
-    window.location.assign(url)
-  } else {
-    window.open(url, "_blank")
-  }
+  window.open(url, "_blank")
 }
 
 const useGoToUrl = (id, urls, { openList, setSelectedId } = {}) => {

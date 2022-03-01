@@ -57,10 +57,6 @@ const Node = ({ agent: { id, name, urls }, onDeleteClick, selectedId, setSelecte
 
   const selected = selectedId === id
 
-  const visitNode = () => {
-    // todo
-  }
-
   return (
     <>
       <MenuItem
