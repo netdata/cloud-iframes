@@ -5,7 +5,7 @@
   "homepage": "/sso",
   "dependencies": {
     "@material/list": "^5.1.0",
-    "@netdata/netdata-ui": "^1.4.3",
+    "@netdata/netdata-ui": "^1.7.57",
     "@rmwc/icon": "^5.7.2",
     "@rmwc/list": "^5.7.2",
     "@rmwc/tooltip": "^5.7.2",
