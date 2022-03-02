@@ -14,8 +14,6 @@ export const PanelRowContainer = styled(Flex)`
 
 const StyledIcon = styled(Icon)`
   flex: 0 0 auto;
-  height: 16px;
-  width: 16px;
 `
 
 const StyledLoaderIcon = styled(IconComponents.LoaderIcon)`
