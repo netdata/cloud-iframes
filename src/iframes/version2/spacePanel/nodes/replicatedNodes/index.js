@@ -1,33 +1,25 @@
-import React, { useState, useCallback, useMemo } from "react";
-import styled from "styled-components";
-import { Text, Flex, Icon, TextInput } from "@netdata/netdata-ui";
-import { MenuList } from "components/menus";
-import { alwaysEndWithSlash } from "utils/always-end-with-slash";
-import Pill from "./pill";
-import Anchor from './anchor'
-import { StyledIcon } from "../../styled";
+import React, { useState, useCallback, useMemo } from "react"
+import { Text, Flex, Icon } from "@netdata/netdata-ui"
+import { MenuList } from "components/menus"
+import { alwaysEndWithSlash } from "utils/always-end-with-slash"
+import Search from "components/search"
+import Pill from "./pill"
+import Anchor from "./anchor"
+import { StyledIcon } from "../../styled"
 
-const Search = styled(TextInput)`
-  & > label {
-    margin-bottom: 0;
-  }
-`;
+const ReplicatedNodes = ({ replicatedNodes: { parentNode, replicatedNodes } }) => {
+  const [listOpen, setListOpen] = useState(true)
+  const [value, setValue] = useState("")
 
-const ReplicatedNodes = ({
-  replicatedNodes: { parentNode, replicatedNodes },
-}) => {
-  const [listOpen, setListOpen] = useState(true);
-  const [value, setValue] = useState("");
-
-  const toggleListOpen = useCallback(() => setListOpen((o) => !o), []);
-  const onChange = useCallback((e) => setValue(e.target.value), []);
+  const toggleListOpen = useCallback(() => setListOpen(o => !o), [])
+  const onChange = useCallback(e => setValue(e.target.value), [])
 
   const nodes = useMemo(() => {
-    if (!value) return replicatedNodes;
+    if (!value) return replicatedNodes
     return replicatedNodes.filter(({ hostname }) =>
       hostname.toLowerCase().includes(value.toLowerCase())
-    );
-  }, [replicatedNodes, value]);
+    )
+  }, [replicatedNodes, value])
 
   return (
     <MenuList
@@ -35,34 +27,19 @@ const ReplicatedNodes = ({
       toggleOpen={toggleListOpen}
       label={
         <Flex padding={[2, 0]} flex alignItems="center" gap={3}>
-          <StyledIcon
-            right={!listOpen}
-            name="chevron_down"
-            size="small"
-            color="text"
-          />
+          <StyledIcon right={!listOpen} name="chevron_down" size="small" color="text" />
           <Text>Replicated Nodes</Text>
         </Flex>
       }
     >
       <Flex column gap={3} padding={[2, 0]}>
-        <Anchor
-          gap={2}
-          href={parentNode.url}
-          target="_PARENT"
-          padding={[2, 0, 0, 4]}
-        >
+        <Anchor gap={2} href={parentNode.url} target="_PARENT" padding={[2, 0, 0, 4]}>
           <Icon name="nodes" size="small" color="bright" />
           <Text color="bright">{parentNode.hostname}</Text>
         </Anchor>
         {nodes.length >= 5 && (
           <Flex padding={[0, 0, 0, 6]}>
-            <Search
-              value={value}
-              onChange={onChange}
-              iconLeft={<Icon name="search_s" size="small" color="text" />}
-              metaShrinked
-            />
+            <Search value={value} onChange={onChange} />
           </Flex>
         )}
         {nodes.map(({ hostname, url, status }) => (
@@ -88,7 +65,7 @@ const ReplicatedNodes = ({
         ))}
       </Flex>
     </MenuList>
-  );
-};
+  )
+}
 
-export default ReplicatedNodes;
+export default ReplicatedNodes
