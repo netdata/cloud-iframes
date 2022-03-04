@@ -1,9 +1,10 @@
 import styled from "styled-components"
 import {
-  H5, getSizeBy, getColor, Icon, TextNano, Text,
+  H5, getSizeBy, getColor, Icon, TextNano, Text, webkitVisibleScrollbar,
 } from "@netdata/netdata-ui"
 
 export const NodesContainer = styled.div`
+  ${webkitVisibleScrollbar}
   .mdc-list-item {
     padding: 0 0;
     padding-left: 0;
