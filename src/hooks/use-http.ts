@@ -11,6 +11,14 @@ export const axiosInstance = axios.create({
   },
 })
 
+const requestOptions = {
+  timeout: GLOBAL_TIMEOUT,
+  headers: {
+    "Cache-Control": "no-cache, no-store",
+    Pragma: "no-cache",
+  },
+}
+
 export const useHttp = <T = unknown>(
   url: string | undefined,
   shouldMakeCall: boolean = true,
@@ -22,8 +30,8 @@ export const useHttp = <T = unknown>(
   useEffect(() => {
     if (shouldMakeCall && url && !error) {
       setIsFetching(true)
-      axiosInstance
-        .get(url)
+      axios
+        .get(url, requestOptions)
         .then(r => {
           if (r.data) {
             setData(r.data)
