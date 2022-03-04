@@ -3,13 +3,12 @@ import { axiosInstance as request } from "hooks/use-http"
 
 const fetchAuthorizedNodeIds = machineGuid =>
   request
-    .get(`/api/v1/agents/${machineGuid}/user_access`, {
-      transform: data => data.authorizedNodeIDs,
-    })
+    .get(`/api/v1/agents/${machineGuid}/user_access`)
+    .then(({ data: { authorizedNodeIDs } }) => authorizedNodeIDs)
     .catch(() => ({ data: [] }))
 
 const findValidUrl = async (urls, { spaces = [], id }) => {
-  const { data: ids } = await fetchAuthorizedNodeIds(id)
+  const ids = await fetchAuthorizedNodeIds(id)
 
   let cloudUrl
 
