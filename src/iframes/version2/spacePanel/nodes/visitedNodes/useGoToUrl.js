@@ -1,31 +1,44 @@
 import { useCallback, useRef } from "react"
 import { axiosInstance as request } from "hooks/use-http"
 
-const findValidUrl = async (urls, { spaces = [], nodeId }) => {
-  const cloudUrl = await Promise.any(
-    spaces.map(space => {
-      return request
-        .get(`/api/v1/spaces/${space.id}/rooms`)
-        .then(({ data: { results: rooms } }) => {
-          return Promise.any(
-            rooms.map(room =>
-              request
-                .get(`/api/v1/spaces/${space.id}/rooms/${room.id}/nodes`)
-                .then(({ data: { results: nodes } }) => {
-                  const node = nodes.find(({ id }) => id === nodeId)
-                  if (!node) {
-                    throw new Error("can't find matching node")
-                  }
-                  const { protocol, host } = window.location
-                  return `${protocol}//${host}/spaces/${space.slug}/rooms/${room.slug}/nodes/${node.id}`
-                })
-            )
-          )
-        })
+const fetchAuthorizedNodeIds = machineGuid =>
+  request
+    .get(`/api/v1/agents/${machineGuid}/user_access`, {
+      transform: data => data.authorizedNodeIDs,
     })
-  )
-    .then(url => url)
-    .catch(() => {})
+    .catch(() => ({ data: [] }))
+
+const findValidUrl = async (urls, { spaces = [], id }) => {
+  const { data: ids } = await fetchAuthorizedNodeIds(id)
+
+  let cloudUrl
+
+  if (ids.length) {
+    cloudUrl = await Promise.any(
+      spaces.map(space => {
+        return request
+          .get(`/api/v1/spaces/${space.id}/rooms`)
+          .then(({ data: { results: rooms } }) => {
+            return Promise.any(
+              rooms.map(room =>
+                request
+                  .get(`/api/v1/spaces/${space.id}/rooms/${room.id}/nodes`)
+                  .then(({ data: { results: nodes } }) => {
+                    const node = nodes.find(({ id }) => ids.includes(id))
+                    if (!node) {
+                      throw new Error("can't find matching node")
+                    }
+                    const { protocol, host } = window.location
+                    return `${protocol}//${host}/spaces/${space.slug}/rooms/${room.slug}/nodes/${node.id}`
+                  })
+              )
+            )
+          })
+      })
+    )
+      .then(url => url)
+      .catch(() => {})
+  }
 
   if (cloudUrl) return cloudUrl
 
@@ -56,7 +69,7 @@ const useGoToUrl = (id, urls, { openList, setSelectedId, spaces } = {}) => {
 
   return useCallback(async () => {
     setSelectedId(id)
-    if (!validUrlRef.current) validUrlRef.current = await findValidUrl(urls, { spaces, nodeId: id })
+    if (!validUrlRef.current) validUrlRef.current = await findValidUrl(urls, { spaces, id })
 
     setSelectedId()
     if (!validUrlRef.current) return openList()
