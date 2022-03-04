@@ -3,6 +3,13 @@ import { useCallback, useEffect, useState } from "react"
 
 const GLOBAL_TIMEOUT = 15_000
 
+type Error = {
+  errorCode: string
+  errorMsgKey: "ErrUnauthenticated"
+  errorMessage: "no cookie"
+  status: number
+}
+
 export const axiosInstance = axios.create({
   timeout: GLOBAL_TIMEOUT,
   headers: {
@@ -35,7 +42,7 @@ export const useHttp = <T = unknown>(
         .then(r => {
           if (r.data) {
             setData(r.data)
-            setError(null)
+            setError(undefined)
             setIsFetching(false)
           }
         })

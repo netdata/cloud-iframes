@@ -5,6 +5,7 @@ type ParentMessageType =
   | "hello-from-space-panel"
   | "hello-from-sign-in"
   | "iframe-focus-change"
+  | "user-node-access"
 
 interface ParentMessage {
   type: ParentMessageType
@@ -55,11 +56,11 @@ export const sendToIframes = (message: IframesMessage) => {
 
 export const useListenToPostMessage = <T>(
   messageType: IframesMessageType,
-  callback?: (newMessage: T) => void,
+  callback?: (newMessage: T) => void
 ) => {
   const [lastMessage, setLastMessage] = useState<T>()
   const handleMessage = useCallback(
-    (message) => {
+    message => {
       const data = message.data as IframesMessage<T>
       if (data.type === messageType) {
         setLastMessage(data.payload)
@@ -68,7 +69,7 @@ export const useListenToPostMessage = <T>(
         }
       }
     },
-    [callback, messageType],
+    [callback, messageType]
   )
   useEffect(() => {
     window.addEventListener("message", handleMessage)
