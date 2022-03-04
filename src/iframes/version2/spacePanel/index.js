@@ -1,11 +1,12 @@
 import React from "react"
 import { useMount } from "react-use"
-import { Flex, H4 } from "@netdata/netdata-ui"
+import { H4 } from "@netdata/netdata-ui"
 import { useFocusDetector } from "hooks/use-focus-detector"
+import { sendToParent, sendToIframes, useListenToPostMessage } from "utils/post-message"
 import SpaceRooms from "./rooms"
 import ReplicatedNodes from "./nodes/replicatedNodes"
 import VisitedNodes from "./nodes/visitedNodes"
-import { sendToParent, sendToIframes, useListenToPostMessage } from "utils/post-message"
+import { Container } from "./styled"
 
 const SpacePanel = () => {
   useFocusDetector()
@@ -36,7 +37,7 @@ const SpacePanel = () => {
   }
 
   return (
-    <Flex flex overflow={{ vertical: "auto", horizontal: "hidden" }} column>
+    <Container flex overflow={{ vertical: "auto", horizontal: "hidden" }} column>
       {rooms && <H4>{rooms.spaceName}</H4>}
       {rooms && !!rooms.results.length && <SpaceRooms rooms={rooms} alarms={alarms} />}
       {streamedHostsData && !!streamedHostsData.replicatedNodes.length && (
@@ -49,7 +50,7 @@ const SpacePanel = () => {
           spaces={spaces}
         />
       )}
-    </Flex>
+    </Container>
   )
 }
 
