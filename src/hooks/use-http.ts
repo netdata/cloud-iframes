@@ -14,36 +14,36 @@ export const axiosInstance = axios.create({
 export const useHttp = <T = unknown>(
   url: string | undefined,
   shouldMakeCall: boolean = true,
-  watchedProperty?: unknown,
+  watchedProperty?: unknown
 ) => {
   const [isFetching, setIsFetching] = useState(false)
-  const [isError, setIsError] = useState(false)
+  const [error, setError] = useState<Error>()
   const [data, setData] = useState<T | null>(null)
   useEffect(() => {
-    if (shouldMakeCall && url && !isError) {
+    if (shouldMakeCall && url && !error) {
       setIsFetching(true)
       axiosInstance
         .get(url)
-        .then((r) => {
+        .then(r => {
           if (r.data) {
             setData(r.data)
-            setIsError(false)
+            setError(null)
             setIsFetching(false)
           }
         })
-        .catch((error) => {
+        .catch(error => {
           // eslint-disable-next-line no-console
           console.warn(`error fetching ${url}`, error)
-          setIsError(true)
+          setError({ ...error.response?.data, status: error.response?.status })
           setIsFetching(false)
         })
     }
-  }, [isError, watchedProperty, shouldMakeCall, url])
+  }, [error, watchedProperty, shouldMakeCall, url])
 
   const resetCallback = useCallback(() => {
     setData(null)
   }, [])
 
   // force triple instead of array
-  return [data, resetCallback, isFetching, isError] as [T | null, () => void, boolean, boolean]
+  return [data, resetCallback, isFetching, error] as [T | null, () => void, boolean, Error]
 }
