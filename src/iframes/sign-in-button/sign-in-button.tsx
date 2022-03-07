@@ -113,15 +113,6 @@ export const SignInButton = () => {
   const cloudSignInUrl =
     "/sign-in" + `?id=${id}&name=${name}&origin=${origin}&redirect_uri=${redirectUri}`
 
-  // touch a node
-  useEffect(() => {
-    if (accoundID) {
-      const touchUrl = `${cloudApiUrl}accounts/${accoundID}/nodes/${id}/touch`
-      // no error handling is needed
-      axiosInstance.post(touchUrl, {})
-    }
-  }, [accoundID, id])
-
   // a hack to trigger /nodes call again
   const [nodesCallID, setNodesCallID] = useState()
   const fetchNodesAgain = () => {
@@ -144,27 +135,39 @@ export const SignInButton = () => {
   }, [account, helloFromSpacePanel, nodes])
 
   // upsert a node
-  const [doneUpsert, setDoneUpsert] = useState(false)
+  type UpsertState = "initial" | "pending" | "fulfilled"
+  const [upsertState, setUpsertState] = useState<UpsertState>("initial")
   useEffect(() => {
-    if (account && nodes && origin && !doneUpsert) {
-      setDoneUpsert(true)
+    if (account && nodes && origin && upsertState === "initial") {
       const currentNode = nodes.results.find(node => node.id === id)
       const nodeCurrentUrls = currentNode?.urls || []
       const nodeCurrentName = currentNode?.name || ""
 
       const urls = onlyUnique(nodeCurrentUrls.concat(origin).map(decodeURIComponent))
       if (urls.length === nodeCurrentUrls.length && name === nodeCurrentName) {
+        setUpsertState("fulfilled")
         return
       }
       const upsertUrl = `${cloudApiUrl}accounts/${account.id}/nodes/${id}`
+      setUpsertState("pending")
       axiosInstance
         .put(upsertUrl, {
           name,
           urls,
         })
         .then(fetchNodesAgain)
+        .then(() => setUpsertState("fulfilled"))
     }
-  }, [account, doneUpsert, id, name, nodes, origin])
+  }, [account, upsertState, id, name, nodes, origin])
+
+  // touch a node
+  useEffect(() => {
+    if (accoundID && upsertState === "fulfilled") {
+      const touchUrl = `${cloudApiUrl}accounts/${accoundID}/nodes/${id}/touch`
+      // no error handling is needed
+      axiosInstance.post(touchUrl, {})
+    }
+  }, [accoundID, id, upsertState])
 
   // sync private registry
   const privateRegistryNodes = useListenToPostMessage<RegistryMachine[]>("synced-private-registry")
