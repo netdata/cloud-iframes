@@ -6,6 +6,7 @@ import { sendToParent } from "../utils/post-message"
 type NodeClaimedStatus = "NOT_CLAIMED" | "CLAIMED"
 type UserNodeAccess = "NO_ACCESS" | "ACCESS_OK"
 type UserStatus = "LOGGED_IN" | "EXPIRED_LOGIN" | "UNKNOWN"
+type NodeLiveness = "LIVE" | "NOT_LIVE"
 
 // on 401
 type ErrorUserUnknown = {
@@ -28,6 +29,7 @@ export type AgentInfoPayload = {
 export type AgentMessagePayload = {
   userStatus: UserStatus
   nodeClaimedStatus: NodeClaimedStatus
+  nodeLiveness: NodeLiveness
   userNodeAccess: UserNodeAccess
 }
 
@@ -40,7 +42,7 @@ export const useUserNodeAccess = ({ machineGUID }: { machineGUID: null | string 
     `${cloudApiUrl}agents/${machineGUID}/info`,
     Boolean(machineGUID)
   )
-  const message2Agent = useMemo(() => {
+  const message2Agent = useMemo((): AgentMessagePayload | void => {
     if ((!userAccess && !userAccessError) || !agentInfo) return
 
     let userStatus: UserStatus
@@ -52,9 +54,12 @@ export const useUserNodeAccess = ({ machineGUID }: { machineGUID: null | string 
     const userNodeAccess: UserNodeAccess =
       userAccess?.userNodeStatus === "accessOK" ? "ACCESS_OK" : "NO_ACCESS"
 
+    const nodeLiveness: NodeLiveness = agentInfo.reachable ? "LIVE" : "NOT_LIVE"
+
     return {
       userStatus,
       nodeClaimedStatus,
+      nodeLiveness,
       userNodeAccess,
     }
   }, [userAccess, userAccessError, agentInfo])
