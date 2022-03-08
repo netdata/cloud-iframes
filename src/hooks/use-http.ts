@@ -3,6 +3,13 @@ import { useCallback, useEffect, useState } from "react"
 
 const GLOBAL_TIMEOUT = 15_000
 
+type Error = {
+  errorCode: string
+  errorMsgKey: "ErrUnauthenticated"
+  errorMessage: "no cookie"
+  status: number
+}
+
 export const axiosInstance = axios.create({
   timeout: GLOBAL_TIMEOUT,
   headers: {
@@ -11,39 +18,47 @@ export const axiosInstance = axios.create({
   },
 })
 
+const requestOptions = {
+  timeout: GLOBAL_TIMEOUT,
+  headers: {
+    "Cache-Control": "no-cache, no-store",
+    Pragma: "no-cache",
+  },
+}
+
 export const useHttp = <T = unknown>(
   url: string | undefined,
   shouldMakeCall: boolean = true,
-  watchedProperty?: unknown,
+  watchedProperty?: unknown
 ) => {
   const [isFetching, setIsFetching] = useState(false)
-  const [isError, setIsError] = useState(false)
+  const [error, setError] = useState<Error>()
   const [data, setData] = useState<T | null>(null)
   useEffect(() => {
-    if (shouldMakeCall && url && !isError) {
+    if (shouldMakeCall && url && !error) {
       setIsFetching(true)
-      axiosInstance
-        .get(url)
-        .then((r) => {
+      axios
+        .get(url, requestOptions)
+        .then(r => {
           if (r.data) {
             setData(r.data)
-            setIsError(false)
+            setError(undefined)
             setIsFetching(false)
           }
         })
-        .catch((error) => {
+        .catch(error => {
           // eslint-disable-next-line no-console
           console.warn(`error fetching ${url}`, error)
-          setIsError(true)
+          setError({ ...error.response?.data, status: error.response?.status })
           setIsFetching(false)
         })
     }
-  }, [isError, watchedProperty, shouldMakeCall, url])
+  }, [error, watchedProperty, shouldMakeCall, url])
 
   const resetCallback = useCallback(() => {
     setData(null)
   }, [])
 
   // force triple instead of array
-  return [data, resetCallback, isFetching, isError] as [T | null, () => void, boolean, boolean]
+  return [data, resetCallback, isFetching, error] as [T | null, () => void, boolean, Error]
 }
