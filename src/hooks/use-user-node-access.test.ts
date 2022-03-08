@@ -60,6 +60,11 @@ const agentInfoNotClaimed: AgentInfoPayload = {
   reachable: true,
 }
 
+const agentInfoClaimedNotReachable: AgentInfoPayload = {
+  claimed: true,
+  reachable: false,
+}
+
 const resolve = <T>(x: T) =>
   new Promise(resolve => {
     setTimeout(() => {
@@ -106,6 +111,7 @@ describe("use-user-node-access", () => {
       wrapMessage({
         userStatus: "UNKNOWN",
         nodeClaimedStatus: "CLAIMED",
+        nodeLiveness: "LIVE",
         userNodeAccess: "NO_ACCESS",
       })
     )
@@ -123,6 +129,7 @@ describe("use-user-node-access", () => {
       wrapMessage({
         userStatus: "EXPIRED_LOGIN",
         nodeClaimedStatus: "CLAIMED",
+        nodeLiveness: "LIVE",
         userNodeAccess: "ACCESS_OK",
       })
     )
@@ -140,6 +147,7 @@ describe("use-user-node-access", () => {
       wrapMessage({
         userStatus: "EXPIRED_LOGIN",
         nodeClaimedStatus: "NOT_CLAIMED",
+        nodeLiveness: "LIVE",
         userNodeAccess: "NO_ACCESS",
       })
     )
@@ -157,6 +165,7 @@ describe("use-user-node-access", () => {
       wrapMessage({
         userStatus: "LOGGED_IN",
         nodeClaimedStatus: "CLAIMED",
+        nodeLiveness: "LIVE",
         userNodeAccess: "NO_ACCESS",
       })
     )
@@ -174,6 +183,7 @@ describe("use-user-node-access", () => {
       wrapMessage({
         userStatus: "LOGGED_IN",
         nodeClaimedStatus: "NOT_CLAIMED",
+        nodeLiveness: "LIVE",
         userNodeAccess: "NO_ACCESS",
       })
     )
@@ -191,6 +201,25 @@ describe("use-user-node-access", () => {
       wrapMessage({
         userStatus: "LOGGED_IN",
         nodeClaimedStatus: "CLAIMED",
+        nodeLiveness: "LIVE",
+        userNodeAccess: "ACCESS_OK",
+      })
+    )
+  })
+
+  it("handles user with access to unreachable node", async () => {
+    mockedAxios.get.mockImplementation((url: string) => {
+      if (url === userAccessUrl) return resolve(hasAccessResponse)
+      return resolve(agentInfoClaimedNotReachable)
+    })
+    const { waitForNextUpdate } = renderHook(() => useUserNodeAccess({ machineGUID }))
+    await waitForNextUpdate()
+    expect(sendToParent).toHaveBeenCalledTimes(1)
+    expect(sendToParent).toHaveBeenCalledWith(
+      wrapMessage({
+        userStatus: "LOGGED_IN",
+        nodeClaimedStatus: "CLAIMED",
+        nodeLiveness: "NOT_LIVE",
         userNodeAccess: "ACCESS_OK",
       })
     )
