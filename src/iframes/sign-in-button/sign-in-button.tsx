@@ -16,6 +16,7 @@ import {
 } from "utils/types"
 import { getCookie } from "utils/cookies"
 import { useFocusDetector } from "hooks/use-focus-detector"
+import { useUserNodeAccess } from "hooks/use-user-node-access"
 
 import { StyledButtonContainer, StyledSignInButton } from "./styles"
 
@@ -112,6 +113,8 @@ export const SignInButton = () => {
   const origin = query.get("origin")
   const cloudSignInUrl =
     "/sign-in" + `?id=${id}&name=${name}&origin=${origin}&redirect_uri=${redirectUri}`
+
+  useUserNodeAccess({ machineGUID: id })
 
   // a hack to trigger /nodes call again
   const [nodesCallID, setNodesCallID] = useState()
