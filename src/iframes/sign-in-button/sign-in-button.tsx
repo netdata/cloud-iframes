@@ -161,6 +161,7 @@ export const SignInButton = () => {
           urls,
         })
         .then(() => setUpsertState("fulfilled"))
+        .catch(() => fetchNodesAgain())
     }
   }, [account, upsertState, id, name, nodes, origin])
 
@@ -169,7 +170,7 @@ export const SignInButton = () => {
     if (accoundID && upsertState === "fulfilled") {
       const touchUrl = `${cloudApiUrl}accounts/${accoundID}/nodes/${id}/touch`
       // no error handling is needed
-      axiosInstance.post(touchUrl, {})
+      axiosInstance.post(touchUrl, {}).catch(() => fetchNodesAgain())
     }
   }, [accoundID, id, upsertState])
 
