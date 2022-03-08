@@ -19,6 +19,7 @@ import { useFocusDetector } from "hooks/use-focus-detector"
 import { useUserNodeAccess } from "hooks/use-user-node-access"
 
 import { StyledButtonContainer, StyledSignInButton } from "./styles"
+import optimisticallyUpdatedVisitedNodes from "./optimistically-updated-visited-nodes"
 
 const TOKEN_EXPIRES_AT = "token_expires_at"
 
@@ -108,9 +109,9 @@ export const SignInButton = () => {
   })
 
   const redirectUri = encodeURIComponent(document.referrer)
-  const id = query.get("id")
-  const name = query.get("name")
-  const origin = query.get("origin")
+  const id = query.get("id")!
+  const name = query.get("name")!
+  const origin = query.get("origin")!
   const cloudSignInUrl =
     "/sign-in" + `?id=${id}&name=${name}&origin=${origin}&redirect_uri=${redirectUri}`
 
@@ -130,9 +131,10 @@ export const SignInButton = () => {
   )
   useEffect(() => {
     if (nodes && helloFromSpacePanel && account) {
+      const updated = optimisticallyUpdatedVisitedNodes(nodes.results, id, origin, name)
       sendToIframes({
         type: "visited-nodes",
-        payload: nodes.results,
+        payload: updated,
       })
     }
   }, [account, helloFromSpacePanel, nodes])
@@ -158,8 +160,8 @@ export const SignInButton = () => {
           name,
           urls,
         })
-        .then(fetchNodesAgain)
         .then(() => setUpsertState("fulfilled"))
+        .catch(() => fetchNodesAgain())
     }
   }, [account, upsertState, id, name, nodes, origin])
 
@@ -168,7 +170,7 @@ export const SignInButton = () => {
     if (accoundID && upsertState === "fulfilled") {
       const touchUrl = `${cloudApiUrl}accounts/${accoundID}/nodes/${id}/touch`
       // no error handling is needed
-      axiosInstance.post(touchUrl, {})
+      axiosInstance.post(touchUrl, {}).catch(() => fetchNodesAgain())
     }
   }, [accoundID, id, upsertState])
 
