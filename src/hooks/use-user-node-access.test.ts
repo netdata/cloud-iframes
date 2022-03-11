@@ -12,6 +12,7 @@ import {
 jest.mock("axios")
 jest.mock("../utils/post-message", () => ({
   sendToParent: jest.fn(),
+  useListenToPostMessage: jest.fn(),
 }))
 
 const mockedAxios = axios as jest.Mocked<typeof axios>

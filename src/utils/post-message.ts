@@ -28,6 +28,7 @@ type IframesMessageType =
   | "space-change"
   | "synced-private-registry"
   | "sign-out"
+  | "request-refresh-access"
 
 interface IframesMessage<T = unknown> {
   type: IframesMessageType
