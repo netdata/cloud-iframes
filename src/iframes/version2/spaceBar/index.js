@@ -72,7 +72,8 @@ const SpacesBar = () => {
         )}
       </Flex>
       <Flex height="1px" background="separator" width="20px" />
-      <Button
+      <Button 
+        data-testid="workspaceBar-addSpace-button"
         icon="plus"
         onClick={() => {
           window.top.window.location.href = `/spaces/${
