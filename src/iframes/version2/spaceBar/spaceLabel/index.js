@@ -19,7 +19,7 @@ const SpaceLabel = ({ space, active, onSpaceIconClick }) => {
   ]);
 
   return (
-    <SpaceBox active={active} onClick={onClick}>
+    <SpaceBox active={active} onClick={onClick} data-testid={"spaceLabel-space-" + space.name}>
       <Text strong color={active ? "main" : "border"}>
         {firstLetter}
       </Text>

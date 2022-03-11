@@ -44,7 +44,7 @@ const SpacesBar = () => {
       gap={4}
       overflow="hidden"
     >
-      <Flex column gap={2}>
+      <Flex column gap={2}  data-testid="workspaceBar-spaces-list">
         {spaces && spaces.length ? (
           spaces.map((space) => {
             const isActive = space.id === activeSpaceID;
@@ -72,7 +72,8 @@ const SpacesBar = () => {
         )}
       </Flex>
       <Flex height="1px" background="separator" width="20px" />
-      <Button
+      <Button 
+        data-testid="workspaceBar-addSpace-button"
         icon="plus"
         onClick={() => {
           window.top.window.location.href = `/spaces/${

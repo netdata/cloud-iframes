@@ -20,6 +20,7 @@ const SignOut = () => {
 
   return buttonType !== "borderless" ? (
     <Button
+      data-testid="signout-button-iframe"
       onClick={signOut}
       flavour={buttonType || "default"}
       label="SIGN OUT"
