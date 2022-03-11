@@ -44,7 +44,7 @@ const SpacesBar = () => {
       gap={4}
       overflow="hidden"
     >
-      <Flex column gap={2}>
+      <Flex column gap={2}  data-testid="workspaceBar-spaces-list">
         {spaces && spaces.length ? (
           spaces.map((space) => {
             const isActive = space.id === activeSpaceID;
