@@ -1,22 +1,22 @@
-import React, { useCallback } from "react"
-import styled from "styled-components"
-import { Text, Button } from "@netdata/netdata-ui"
-import { useFocusDetector } from "hooks/use-focus-detector"
-import { sendToIframes } from "utils/post-message"
+import React, { useCallback } from "react";
+import styled from "styled-components";
+import { Text, Button } from "@netdata/netdata-ui";
+import { useFocusDetector } from "hooks/use-focus-detector";
+import { sendToIframes } from "utils/post-message";
 
 const TextButton = styled(Text).attrs({ role: "button" })`
   cursor: pointer;
-`
+`;
 
 const SignOut = () => {
-  useFocusDetector()
+  useFocusDetector();
 
-  const query = new URLSearchParams(window.location.search.substr(1))
-  const buttonType = query.get("type")
+  const query = new URLSearchParams(window.location.search.substr(1));
+  const buttonType = query.get("type");
 
   const signOut = useCallback(() => {
-    sendToIframes({ type: "sign-out", payload: true })
-  }, [])
+    sendToIframes({ type: "sign-out", payload: true });
+  }, []);
 
   return buttonType !== "borderless" ? (
     <Button
@@ -27,7 +27,7 @@ const SignOut = () => {
     />
   ) : (
     <TextButton onClick={signOut}>Sign Out</TextButton>
-  )
-}
+  );
+};
 
-export default SignOut
+export default SignOut;
