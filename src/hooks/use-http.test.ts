@@ -29,10 +29,10 @@ describe("use-http", () => {
     const { rerender, result, waitForNextUpdate } = renderHook(() => useHttp(url))
     expect(mockedAxios.get).toBeCalledTimes(1)
     expect(result.current[0]).toEqual(null)
+    await waitForNextUpdate()
 
     rerender()
     expect(axios.get).toBeCalledTimes(1)
-    await waitForNextUpdate()
     expect(result.current[0]).toEqual(data1.data)
   })
 
