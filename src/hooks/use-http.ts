@@ -34,8 +34,9 @@ export const useHttp = <T = unknown>(
   const [isFetching, setIsFetching] = useState(false)
   const [error, setError] = useState<Error>()
   const [data, setData] = useState<T | null>(null)
+  const [isFulfilled, setIsFulfilled] = useState(false)
   useEffect(() => {
-    if (shouldMakeCall && url && !error) {
+    if (shouldMakeCall && url && !error && !isFulfilled) {
       setIsFetching(true)
       axios
         .get(url, requestOptions)
@@ -44,6 +45,7 @@ export const useHttp = <T = unknown>(
             setData(r.data)
             setError(undefined)
             setIsFetching(false)
+            setIsFulfilled(true)
           }
         })
         .catch(error => {
@@ -51,13 +53,19 @@ export const useHttp = <T = unknown>(
           console.warn(`error fetching ${url}`, error)
           setError({ ...error.response?.data, status: error.response?.status })
           setIsFetching(false)
+          setIsFulfilled(true)
         })
     }
-  }, [error, watchedProperty, shouldMakeCall, url])
+  }, [error, isFulfilled, shouldMakeCall, url])
 
   const resetCallback = useCallback(() => {
+    setIsFulfilled(false)
     setData(null)
   }, [])
+
+  useEffect(() => {
+    setIsFulfilled(false)
+  }, [setIsFulfilled, watchedProperty])
 
   // force triple instead of array
   return [data, resetCallback, isFetching, error] as [T | null, () => void, boolean, Error]

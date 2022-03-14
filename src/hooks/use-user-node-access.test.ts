@@ -1,7 +1,7 @@
 import axios from "axios"
-import { renderHook } from "@testing-library/react-hooks"
+import { act, renderHook } from "@testing-library/react-hooks"
 
-import { sendToParent } from "../utils/post-message"
+import { sendToParent, useListenToPostMessage } from "../utils/post-message"
 import {
   AgentInfoPayload,
   AgentMessagePayload,
@@ -12,9 +12,11 @@ import {
 jest.mock("axios")
 jest.mock("../utils/post-message", () => ({
   sendToParent: jest.fn(),
+  useListenToPostMessage: jest.fn(),
 }))
 
 const mockedAxios = axios as jest.Mocked<typeof axios>
+const mockedUseListen = useListenToPostMessage as jest.Mock<typeof useListenToPostMessage>
 
 const machineGUID = "12345"
 
@@ -223,5 +225,40 @@ describe("use-user-node-access", () => {
         userNodeAccess: "ACCESS_OK",
       })
     )
+  })
+
+  it("handles second request for update", async () => {
+    mockedAxios.get.mockImplementation((url: string) => {
+      if (url === userAccessUrl) return resolve(hasAccessResponse)
+      return resolve(agentInfoClaimedNotReachable)
+    })
+
+    let makeCallback: Function
+    mockedUseListen.mockImplementation((type, callback): any => {
+      makeCallback = () => {
+        callback()
+      }
+    })
+
+    const { waitForNextUpdate } = renderHook(() => useUserNodeAccess({ machineGUID }))
+    expect(axios.get).toBeCalledTimes(2)
+    await waitForNextUpdate()
+    expect(sendToParent).toHaveBeenCalledTimes(1)
+    expect(sendToParent).toHaveBeenCalledWith(
+      wrapMessage({
+        userStatus: "LOGGED_IN",
+        nodeClaimedStatus: "CLAIMED",
+        nodeLiveness: "NOT_LIVE",
+        userNodeAccess: "ACCESS_OK",
+      })
+    )
+    act(() => {
+      // @ts-ignore
+      makeCallback()
+    })
+    expect(axios.get).toBeCalledTimes(4)
+    await waitForNextUpdate()
+    expect(sendToParent).toHaveBeenCalledTimes(2)
+    expect(axios.get).toBeCalledTimes(4)
   })
 })
