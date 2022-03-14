@@ -1,7 +1,7 @@
 import { cloudApiUrl } from "utils/constants"
 import { useHttp } from "./use-http"
-import { useEffect, useMemo } from "react"
-import { sendToParent } from "../utils/post-message"
+import { useCallback, useEffect, useMemo } from "react"
+import { sendToParent, useListenToPostMessage } from "../utils/post-message"
 
 type NodeClaimedStatus = "NOT_CLAIMED" | "CLAIMED"
 type UserNodeAccess = "NO_ACCESS" | "ACCESS_OK"
@@ -34,14 +34,21 @@ export type AgentMessagePayload = {
 }
 
 export const useUserNodeAccess = ({ machineGUID }: { machineGUID: null | string }) => {
-  const [userAccess, , , userAccessError] = useHttp<UserAccessPayload>(
+  const [userAccess, resetUserAccess, , userAccessError] = useHttp<UserAccessPayload>(
     `${cloudApiUrl}agents/${machineGUID}/user_access`,
     Boolean(machineGUID)
   )
-  const [agentInfo, , , agentInfoError] = useHttp<AgentInfoPayload>(
+  const [agentInfo, resetAgentInfo, , agentInfoError] = useHttp<AgentInfoPayload>(
     `${cloudApiUrl}agents/${machineGUID}/info`,
     Boolean(machineGUID)
   )
+
+  const refreshAccess = useCallback(() => {
+    resetUserAccess()
+    resetAgentInfo()
+  }, [])
+  useListenToPostMessage("request-refresh-access", refreshAccess)
+
   const message2Agent = useMemo((): AgentMessagePayload | void => {
     if ((!userAccess && !userAccessError) || !agentInfo) return
 
