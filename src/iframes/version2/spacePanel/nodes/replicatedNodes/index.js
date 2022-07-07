@@ -37,7 +37,7 @@ const ReplicatedNodes = ({ replicatedNodes: { parentNode, replicatedNodes } }) =
           <Icon name="nodes" size="small" color="bright" />
           <Text color="bright">{parentNode.hostname}</Text>
         </Anchor>
-        {nodes.length >= 5 && (
+        {replicatedNodes.length >= 5 && (
           <Flex padding={[0, 0, 0, 6]}>
             <Search value={value} onChange={onChange} />
           </Flex>
