@@ -9,10 +9,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup env
+        run: |-
+          case "${{ github.ref }}" in
+            refs/heads/develop)   echo "ENV=testing"    >> $GITHUB_ENV;;
+            refs/heads/release/*) echo "ENV=staging"    >> $GITHUB_ENV;;
+            refs/heads/master)    echo "ENV=production" >> $GITHUB_ENV;;
+          esac
+          echo "DEPLOY=true" >> $GITHUB_ENV;
+          echo "RELEASE=false" >> $GITHUB_ENV;
       - name: Trigger GHA
         uses: benc-uk/workflow-dispatch@v1
         with:
-          inputs: '{ "BRANCH": "${{ github.ref }}" }'
+          inputs: '{ "DEPLOY": "${{ env.DEPLOY }}",  "ENV": "${{ env.ENV }}",  "RELEASE": "${{ env.RELEASE }}"  }'
           ref: 'develop'
           repo: netdata/cloud-sso
           token: ${{ secrets.NETDATABOT_GITHUB_TOKEN }}
