@@ -112,8 +112,7 @@ export const SignInButton = () => {
   const id = query.get("id")!
   const name = query.get("name")!
   const origin = query.get("origin")!
-  const cloudSignInUrl =
-    "/sign-in" + `?id=${id}&name=${name}&origin=${origin}&redirect_uri=${redirectUri}`
+  const cloudSignInUrl = `/sign-in?id=${id}&name=${name}&origin=${origin}&redirect_uri=${redirectUri}`
 
   useUserNodeAccess({ machineGUID: id })
 
@@ -137,7 +136,7 @@ export const SignInButton = () => {
         payload: updated,
       })
     }
-  }, [account, helloFromSpacePanel, nodes])
+  }, [account, helloFromSpacePanel, id, name, origin, nodes])
 
   // upsert a node
   type UpsertState = "initial" | "pending" | "fulfilled"
@@ -236,7 +235,7 @@ export const SignInButton = () => {
   useEffect(() => {
     if (currentSpaceID) {
       const makeCall = () => {
-        const getAlarmsUrl = `${cloudApiUrl}spaces/${currentSpaceID}/rooms/alarms`
+        const getAlarmsUrl = `/api/v2/spaces/${currentSpaceID}/alarms`
         axiosInstance.get<AlarmsCallPayload>(getAlarmsUrl).then(({ data: alarms }) => {
           sendToIframes({
             type: "alarms",
