@@ -136,7 +136,7 @@ export const SignInButton = () => {
         payload: updated,
       })
     }
-  }, [account, helloFromSpacePanel, nodes])
+  }, [account, helloFromSpacePanel, id, name, origin, nodes])
 
   // upsert a node
   type UpsertState = "initial" | "pending" | "fulfilled"
