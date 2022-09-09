@@ -92,7 +92,8 @@ export const SignInButton = () => {
   const firstSpaceID = spaces?.[0]?.id
   const [rooms, resetRooms] = useHttp<Room[]>(
     `/api/v2/spaces/${spaceID || firstSpaceID}/rooms`,
-    Boolean(firstSpaceID)
+    Boolean(firstSpaceID),
+    spaceID
   )
   useEffect(() => {
     if (rooms && helloFromSpacePanel) {
