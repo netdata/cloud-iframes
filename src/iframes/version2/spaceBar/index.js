@@ -13,18 +13,17 @@ const SpacesBar = () => {
       payload: true,
     });
   });
-  const spacesResult = useListenToPostMessage("spaces");
-  const spaces = spacesResult?.results;
+  const spaces = useListenToPostMessage("spaces");
 
   // duplicated state! if additional logic will be added it's better to use sign-in-button
   // activeSpaceID state
   const [activeSpaceID, setActiveSpaceID] = useState("");
 
   useEffect(() => {
-    if (!activeSpaceID && spacesResult && !!spacesResult.results.length) {
-      setActiveSpaceID(spacesResult.results[0].id);
+    if (!activeSpaceID && spaces && !!spaces.length) {
+      setActiveSpaceID(spaces[0].id);
     }
-  }, [activeSpaceID, spacesResult]);
+  }, [activeSpaceID, spaces]);
 
   const handleSpaceIconClick = (spaceId) => {
     setActiveSpaceID(spaceId);
@@ -72,7 +71,7 @@ const SpacesBar = () => {
         )}
       </Flex>
       <Flex height="1px" background="separator" width="20px" />
-      <Button 
+      <Button
         data-testid="workspaceBar-addSpace-button"
         icon="plus"
         onClick={() => {

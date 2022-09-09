@@ -26,8 +26,7 @@ const SpacePanel = () => {
   const streamedHostsData = useListenToPostMessage("streamed-hosts-data")
   const visitedNodes = useListenToPostMessage("visited-nodes")
   const alarms = useListenToPostMessage("alarms") || []
-  const spacesResult = useListenToPostMessage("spaces")
-  const spaces = spacesResult?.results
+  const spaces = useListenToPostMessage("spaces")
 
   const handleDeleteNode = (nodeID, url) => {
     sendToIframes({
@@ -39,7 +38,7 @@ const SpacePanel = () => {
   return (
     <Container flex overflow={{ vertical: "auto", horizontal: "hidden" }} column>
       {rooms && <H4>{rooms.spaceName}</H4>}
-      {rooms && !!rooms.results.length && <SpaceRooms rooms={rooms} alarms={alarms} />}
+      {rooms && !!rooms.list.length && <SpaceRooms rooms={rooms} alarms={alarms} />}
       {streamedHostsData && !!streamedHostsData.replicatedNodes.length && (
         <ReplicatedNodes replicatedNodes={streamedHostsData} />
       )}
