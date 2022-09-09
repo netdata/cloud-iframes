@@ -75,8 +75,8 @@ export const SignInButton = () => {
   const helloFromSpacePanel = useListenToPostMessage("hello-from-space-panel")
 
   // fetch spaces, and send it to spaces-bar iframe
-  const [spaces, resetSpaces] = useHttpPoll<Space>(
-    `${cloudApiUrl}spaces`,
+  const [spaces, resetSpaces] = useHttp<Space[]>(
+    "/api/v2/spaces",
     Boolean(account) && !disableCloud
   )
 
@@ -89,17 +89,17 @@ export const SignInButton = () => {
   const [spaceID, setSpaceID] = useState()
 
   // fetch rooms of first space and send it to space-panel iframe
-  const firstSpaceID = spaces?.results[0]?.id
-  const [rooms, resetRooms] = useHttpPoll<Room>(
-    `${cloudApiUrl}spaces/${spaceID || firstSpaceID}/rooms`,
+  const firstSpaceID = spaces?.[0]?.id
+  const [rooms, resetRooms] = useHttp<Room[]>(
+    `/api/v2/spaces/${spaceID || firstSpaceID}/rooms`,
     Boolean(firstSpaceID)
   )
   useEffect(() => {
     if (rooms && helloFromSpacePanel) {
-      const currentSpace = spaces?.results.find(space => space.id === (spaceID || firstSpaceID))
+      const currentSpace = spaces?.find(space => space.id === (spaceID || firstSpaceID))
       sendToIframes({
         type: "rooms",
-        payload: { ...rooms, spaceSlug: currentSpace?.slug, spaceName: currentSpace?.name },
+        payload: { list: rooms, spaceSlug: currentSpace?.slug, spaceName: currentSpace?.name },
       })
     }
   }, [firstSpaceID, helloFromSpacePanel, spaceID, spaces, rooms])

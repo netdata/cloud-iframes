@@ -50,7 +50,7 @@ const SpaceRooms = ({ alarms, rooms }) => {
       }
     >
       <Flex column gap={2}>
-        {rooms.results.map((room) => {
+        {rooms.list.map((room) => {
           const roomAlarms = alarms.find((alarm) => alarm.roomID === room.id);
           return (
             <RoomLabel
