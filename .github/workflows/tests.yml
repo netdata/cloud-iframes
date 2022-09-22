@@ -9,6 +9,10 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+permissions:
+  id-token: write
+  contents: read
+  actions: read
 
 jobs:
   tests:
@@ -40,19 +44,17 @@ jobs:
           test-script: npm test
           annotations: all
 
-      - name: Gain access to test-reports bucket
+      - name: Configure AWS Credentials
         if: (steps.run-tests.outcome == 'failure' || steps.run-tests.outcome == 'success') && github.ref == 'refs/heads/develop'
-        uses: google-github-actions/setup-gcloud@v0
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          project_id: "netdata-cloud-testing"
-          service_account_key: ${{ secrets.TEST_AUTOMATION_SERVICE_ACCOUNT }}
-          export_default_credentials: true
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ROOT_ACCOUNT_ID }}:role/github-test-reports
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Upload report to test-reports bucket
         if: (steps.run-tests.outcome == 'failure' || steps.run-tests.outcome == 'success') && github.ref == 'refs/heads/develop'
         run: |
-          gsutil -h "Cache-Control: max-age=0, no-store" cp /tmp/coverage_report gs://${{ secrets.TEST_AUTOMATION_STORAGE_BUCKET }}/${{ github.event.repository.name }}/coverage_report
-          gsutil acl set project-private gs://${{ secrets.TEST_AUTOMATION_STORAGE_BUCKET }}/${{ github.event.repository.name }}/coverage_report
+          aws s3 cp /tmp/coverage_report s3://${{ secrets.AWS_TEST_AUTOMATION_STORAGE_BUCKET }}/${{ github.event.repository.name }}/coverage_report
 
       - name: Publish test coverage report
         if: (steps.run-tests.outcome == 'failure' || steps.run-tests.outcome == 'success') && github.ref == 'refs/heads/develop'
