@@ -21,7 +21,7 @@ jobs:
       - name: Trigger GHA
         uses: benc-uk/workflow-dispatch@v1
         with:
-          inputs: '{ "DEPLOY": "${{ env.DEPLOY }}",  "ENV": "${{ env.ENV }}",  "RELEASE": "${{ env.RELEASE }}"  }'
+          inputs: '{ "DEPLOY": "${{ env.DEPLOY }}",  "ENV": "${{ env.ENV }}",  "RELEASE": "${{ env.RELEASE }}",  "EMERGENCY": false  }'
           ref: 'develop'
           repo: netdata/cloud-sso
           token: ${{ secrets.NETDATABOT_GITHUB_TOKEN }}
