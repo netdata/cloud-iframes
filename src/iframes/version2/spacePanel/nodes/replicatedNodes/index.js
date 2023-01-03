@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from "react"
-import { Text, Flex, Icon } from "@netdata/netdata-ui"
+import { Text, TextSmall, Flex, Icon } from "@netdata/netdata-ui"
 import { MenuList } from "components/menus"
 import { alwaysEndWithSlash } from "utils/always-end-with-slash"
 import Search from "components/search"
@@ -32,13 +32,13 @@ const ReplicatedNodes = ({ replicatedNodes: { parentNode, replicatedNodes } }) =
         </Flex>
       }
     >
-      <Flex column gap={3} padding={[2, 0]}>
-        <Anchor gap={2} href={parentNode.url} target="_PARENT" padding={[2, 0, 0, 4]}>
+      <Flex column padding={[2, 0]}>
+        <Anchor gap={2} href={parentNode.url} target="_PARENT" margin={[0, 0, 2, 0]} padding={[2, 1]}>
           <Icon name="nodes" size="small" color="bright" />
           <Text color="bright">{parentNode.hostname}</Text>
         </Anchor>
         {replicatedNodes.length >= 5 && (
-          <Flex padding={[0, 0, 0, 6]}>
+          <Flex margin={[0, 0, 2, 0]}>
             <Search value={value} onChange={onChange} />
           </Flex>
         )}
@@ -47,16 +47,15 @@ const ReplicatedNodes = ({ replicatedNodes: { parentNode, replicatedNodes } }) =
             href={alwaysEndWithSlash(url)}
             target="_PARENT"
             key={hostname}
-            padding={[0, 0, 0, 6]}
+            padding={[1, 1]}
             gap={2}
             alignItems="center"
             justifyContent="between"
           >
-            <Flex alignItems="center" gap={2}>
-              <Icon name="node" color="bright" />
-              <Text color="bright" truncate>
+            <Flex alignItems="center" gap={1}>
+              <TextSmall color="bright" wordBreak="break-all">
                 {hostname}
-              </Text>
+              </TextSmall>
             </Flex>
             <Pill background={status ? "success" : "border"} color="bright">
               {status ? "Live" : "Off"}

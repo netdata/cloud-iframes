@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Flex, Text, Icon, getColor } from "@netdata/netdata-ui";
+import { Flex, TextSmall, Icon, getColor } from "@netdata/netdata-ui";
 
 const Indicator = styled(Flex).attrs({
   width: "8px",
@@ -16,6 +16,7 @@ const Container = styled(Flex).attrs({
   round: true,
 })`
   cursor: pointer;
+  text-decoration: none;
   &:hover {
     background: ${getColor("selected")};
   }
@@ -29,15 +30,15 @@ const RoomLabel = ({ alarmCounter, room, spaceSlug, unreachableCount }) => {
       justifyContent="between"
       flex
       padding={[0,0,0,2]}
-      height="32px"
+      height="24px"
       round
       as="a"
       href={href}
       target="_PARENT"
     >
       <Flex alignItems="center" gap={2}>
-        <Icon name="space_new" size="small" color="text" />
-        <Text truncate>{room.name}</Text>
+        <Icon name="space_new" size="small" color="text" width="12px" height="12px" />
+        <TextSmall truncate>{room.name}</TextSmall>
       </Flex>
       <Flex gap={1}>
         {alarmCounter && !!alarmCounter.critical && (
