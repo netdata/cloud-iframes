@@ -1,6 +1,6 @@
 import React, { useCallback, forwardRef } from "react"
 import styled from "styled-components"
-import { getColor, Flex, Icon, Text, IconComponents } from "@netdata/netdata-ui"
+import { getColor, Flex, Icon, TextSmall, IconComponents } from "@netdata/netdata-ui"
 
 export const PanelRowContainer = styled(Flex)`
   cursor: pointer;
@@ -27,7 +27,7 @@ const MenuItem = forwardRef(
     {
       disabled,
       children,
-      Wrapper = Text,
+      Wrapper = TextSmall,
       onClick,
       testid,
       icon,
