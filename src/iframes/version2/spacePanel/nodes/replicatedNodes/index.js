@@ -47,7 +47,7 @@ const ReplicatedNodes = ({ replicatedNodes: { parentNode, replicatedNodes } }) =
             href={alwaysEndWithSlash(url)}
             target="_PARENT"
             key={hostname}
-            padding={[1, 1]}
+            padding={[1]}
             gap={2}
             alignItems="center"
             justifyContent="between"
