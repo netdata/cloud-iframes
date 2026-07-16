@@ -21,9 +21,9 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v7
         with:
           node-version: "12.x"
           cache: "npm"
@@ -46,7 +46,7 @@ jobs:
 
       - name: Configure AWS Credentials
         if: (steps.run-tests.outcome == 'failure' || steps.run-tests.outcome == 'success') && github.ref == 'refs/heads/develop'
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ROOT_ACCOUNT_ID }}:role/github-test-reports
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
